@@ -1,0 +1,43 @@
+opam-version: "2.0"
+version: "1.0.0"
+synopsis: "Locked dependencies for the MELL formalization"
+maintainer: "MELL formalization maintainers"
+authors: "MELL formalization contributors"
+license: "MIT AND LGPL-3.0-only"
+homepage: "https://github.com/yknishimuta/mell-decidability"
+bug-reports: "https://github.com/yknishimuta/mell-decidability/issues"
+
+depends: [
+  "ocaml" {= "4.14.2"}
+  "dune" {= "3.23.1"}
+  "ocamlfind" {= "1.9.9~preview"}
+  "zarith" {= "1.14"}
+  "coq-core" {= "8.20.1"}
+  "coq-stdlib" {= "8.20.1"}
+  "coqide-server" {= "8.20.1"}
+  "coq" {= "8.20.1"}
+  "coq-yalla" {= "2.0.6"}
+  "coq-kruskal-trees" {= "1.5"}
+  "coq-kruskal-finite" {= "1.5"}
+  "coq-kruskal-almostfull" {= "1.2"}
+  "coq-kruskal-fan" {= "1.2"}
+  "coq-kruskal-higman" {= "1.3"}
+  "coq-kruskal-veldman" {= "1.3"}
+  "coq-kruskal-theorems" {= "1.2"}
+  "coq-mathcomp-bigenough" {= "1.0.3"}
+  "coq-mathcomp-ssreflect" {= "dev"}
+  "coq-mathcomp-fingroup" {= "dev"}
+  "coq-mathcomp-algebra" {= "dev"}
+  "coq-mathcomp-finmap" {= "dev"}
+  "coq-polyhedra" {= "dev"}
+]
+
+pin-depends: [
+  ["coq-mathcomp-ssreflect.dev" "git+https://github.com/Coq-Polyhedra/mathcomp.git#9ad1c11c59a3928ed5e9e429f857b8061ab4eaf0"]
+  ["coq-mathcomp-fingroup.dev" "git+https://github.com/Coq-Polyhedra/mathcomp.git#9ad1c11c59a3928ed5e9e429f857b8061ab4eaf0"]
+  ["coq-mathcomp-algebra.dev" "git+https://github.com/Coq-Polyhedra/mathcomp.git#9ad1c11c59a3928ed5e9e429f857b8061ab4eaf0"]
+  ["coq-mathcomp-finmap.dev" "git+https://github.com/Coq-Polyhedra/finmap.git#65467caeaa4b744d1baa11f21e09b7971dd55c0c"]
+  ["coq-polyhedra.dev" "git+https://github.com/Coq-Polyhedra/Coq-Polyhedra.git#f8b8ce8ebf2516ea1ee4aa6385435204c04d0b5a"]
+]
+
+build: [[make "OPAMEXEC=" "check-core"]]

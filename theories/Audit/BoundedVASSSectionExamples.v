@@ -1,0 +1,21 @@
+From Mell.BVASS Require Import VASSSection BoundedVASSSection.
+
+Check VASSSection.
+Check VASSSectionReach.
+Check vass_section_union.
+Check section_finite_union_reach_iff.
+Check compile_unary_closure_reach_iff.
+Check compile_rule_image_correct.
+Check compile_branching_images_correct.
+Check compile_bounded_vass_section.
+Check bounded_vass_section_correct.
+Check reach_depth_decomposition.
+Check lemma_11_bounded_depth_vass_section.
+
+Print Assumptions compile_rule_image_correct.
+Print Assumptions compile_rule_image_complete.
+Print Assumptions compile_rule_image_sound.
+Print Assumptions rule_copy_prefix_parse.
+Print Assumptions reach_depth_decomposition.
+Print Assumptions bounded_vass_section_correct.
+Print Assumptions lemma_11_bounded_depth_vass_section.

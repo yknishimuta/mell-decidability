@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "verified": "2026-10-17",
+  "sources": [
+    {"name": "Coq", "version": "8.20.1", "sha512": "8ee967c636b67b22a4f34115871d8f9b9114df309afc9ddf5f61275251088c6e21f6cf745811df75554d30f4cebb6682f23eeb2e88b771330c4b60ce3f6bf5e2", "license": "LGPL-2.1-only"},
+    {"name": "YALLA", "version": "2.0.6", "sha256": "a3eff3e456333e72a85c758530588d6d7c7ee071b9e56b013245b55e540e8e9c", "license": "LGPL-3.0-or-later"},
+    {"name": "Kruskal-Trees", "version": "1.5", "sha256": "05029d6575766841a9c036192520471066ec9de04a022a1777fd6b78afd19b04", "license": "MPL-2.0"},
+    {"name": "Kruskal-Finite", "version": "1.5", "sha256": "fc9f35fe5f68793c480dad2d08dd4023ff54e8980685c3e0b3867f2318605812", "license": "MPL-2.0"},
+    {"name": "Kruskal-AlmostFull", "version": "1.2", "sha256": "9f49b9b9cae6665a0852ff746ea7c1703dd11fa51c623ef931c076a4ab27386e", "license": "MPL-2.0"},
+    {"name": "Kruskal-Fan", "version": "1.2", "sha256": "dbd107c4afa5b01a94f69b49f6c33dc7249396865bad9bf82367d5ec49d92c09", "license": "MPL-2.0"},
+    {"name": "Kruskal-Higman", "version": "1.3", "sha256": "4dd079239f71bb4827b8dfdd6c33bbecb72e4e8be4379ab8bd0e1a6e5beaad06", "license": "MPL-2.0"},
+    {"name": "Kruskal-Veldman", "version": "1.3", "sha256": "0a2e33bb394709bd5eb723d5bd47a25770fb8129d0fff5fb83ca44916f3da210", "license": "MPL-2.0"},
+    {"name": "Kruskal-Theorems", "version": "1.2", "sha256": "fcaae51f970d68be837dac59520d0aae0bbaba1d522d9e25466580c3f1c2646d", "license": "MPL-2.0"},
+    {"name": "MathComp fork", "commit": "9ad1c11c59a3928ed5e9e429f857b8061ab4eaf0", "license": "CeCILL-B"},
+    {"name": "Finmap fork", "commit": "65467caeaa4b744d1baa11f21e09b7971dd55c0c", "license": "CeCILL-B"},
+    {"name": "bigenough", "version": "1.0.3", "sha512": "8bbe849e4e6331bfed0eacb2e8f7042fb4aedd280232987be5932e9a044be8685b0c9e7136fe07ee80b5918fb8d914ccb9d391ef03b9fffbe8f162bc787e7ef7", "license": "CeCILL-B"},
+    {"name": "Coq-Polyhedra", "commit": "f8b8ce8ebf2516ea1ee4aa6385435204c04d0b5a", "license": "CeCILL-B"},
+    {"name": "rocq-archive/presburger", "commit": "2b2636f989a93c6f374401f797319c3bad4596e9", "license": "LGPL-2.1-or-later", "status": "rejected_for_T07_order_not_representable"},
+    {"name": "Armael/minicooper", "commit": "3f051307039456a88cf093921278b0dcf224f7cf", "archive_sha256": "81539eaea305f0a02a270ee71a489be15474f955c5b5b8a46ce06e6ab54140b1", "license": "LGPL-3.0-only", "upstream_license_sha256": "a5681bf9b05db14d86776930017c647ad9e6e56ff6bbcfdf21e5848288dfaf1b", "vendored_license_sha256": "e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118", "correctness_theorems": ["MiniCooper.Theory.interpret_qe : forall (cenv : nat -> Z) (f : formula) (env : nat -> Z), all_under_ex (fun p t => wft 0 t /\\ wfp p) f -> interpret_formula cenv env (qe f) <-> interpret_formula cenv env f", "Mell.Presburger.Decide.presburger_decide_correct : forall s : sentence, presburger_decide s = true <-> sentence_semantics s"], "status": "selected_and_integrated_for_T07_ordered_QE_core"}
+  ],
+  "design_documents": {
+    "design_sha256": "1084e041c7106acbaad07c2cffb3e344820f1b4121b2b06ea647176b4f826ff9",
+    "plan_sha256": "89372492f197e4d03228553c2e84ba6aef5d7775b4fb7a15c95387941f257b42",
+    "mell_proof_tex_sha256": "ebb9620d7d5d53466e2153babe87579580509ac47a93069c5cc58d5a66803309",
+    "separator_audit_tex_sha256": "8daf3d86cdf85fa9dfbcc2f3d792f6d9e93c50b728b546153f4b9c7978e40497"
+  },
+  "mathematical_sources": [
+    {
+      "id": "S2026",
+      "title": "Solving the Reachability Problem for Branching Vector Addition Systems via Semilinear Inductive Invariants",
+      "url": "https://arxiv.org/pdf/2607.09558v1",
+      "version": "arXiv:2607.09558v1",
+      "pdf_sha256": "61ca188e9899b911de5662a3b0672653e9d0a3d58d2ae39d34a870a46b5fa422",
+      "license": "CC-BY-4.0",
+      "locator": "Theorem 3.3, Sections 4-7, Appendices A-C",
+      "statement_contract": "For every initialized BVAS S and semilinear Phi containing Reach(S), there is a semilinear inductive invariant I contained in Phi; formalize only with repairs R01-R11.",
+      "status": "to_formalize_with_repairs_R01_R11"
+    },
+    {
+      "id": "BLS_FOSSACS_2026",
+      "title": "Bridging the Gap Between Plain VASS and Branching VASS",
+      "url": "https://link.springer.com/content/pdf/10.1007/978-3-032-22730-0_4.pdf",
+      "doi": "10.1007/978-3-032-22730-0_4",
+      "edition": "FoSSaCS 2026, LNCS 16503, pages 65-87",
+      "pdf_sha256": "4c2de2e4913ad07856056b929cc31f024c5c2579a55c0f3d5e0e67c84aa0e268",
+      "license": "CC-BY-NC-ND-4.0",
+      "locator": "Proposition 5; corrected Corollary 7 path through Lemma 6; Lemmas 8, 9, and 11; Theorem 12; Corollary 14",
+      "statement_contract": "Amalgamate two hereditarily positive context families over one run; combine root-configuration comparison with ordered decorated-tree embedding for the wqo; obtain bounded branching depth, compile each bounded-depth reachability set to a VASS section, conclude every BVASS reachability set is a VASS section, and hence its intersection with a semilinear set is almost semilinear.",
+      "status": "to_formalize"
+    },
+    {
+      "id": "LEROUX_2012",
+      "title": "Vector Addition Systems Reachability Problem (A Simpler Solution)",
+      "url": "https://easychair.org/publications/paper/Blr/open",
+      "doi": "10.29007/bnx2",
+      "edition": "EPiC Series in Computing 10 (2012), pages 214-228",
+      "pdf_sha256": "be169e229c3154523d3a0948f82f112a8c1dbc56b11f085ab6046c18b04a6aab",
+      "rights_status": "publisher page marks the publication all rights reserved; retained here by URL and hash only",
+      "locator": "Sections 2-6; Corollary 6.3 on printed page 224 (PDF page 11)",
+      "statement_contract": "Use only the forward reachability half: for Presburger X and Y, post*(X) intersect Y is almost semilinear, including the production-graph, positive-integer-cycle, and definable-transformer dependencies from Sections 2-6; do not import numbering from another edition.",
+      "status": "to_formalize"
+    },
+    {
+      "id": "REDUCTION_LS",
+      "title": "Non-Elementary Complexities for Branching VASS, MELL, and Extensions",
+      "url": "https://lsv.ens-paris-saclay.fr/Publis/PAPERS/PDF/LS-tocl15.pdf",
+      "doi": "10.1145/2733375",
+      "edition": "ACM TOCL 16(3), article 20 (2015); author PDF matching arXiv:1401.6785v2",
+      "pdf_sha256": "0660cd04d70405a4405ecfdf6a7349e35cdb0f560b559bf8723f244c45183848",
+      "license": "arXiv-nonexclusive-distrib-1.0",
+      "locator": "Lemma 3 first construction; Proposition 7(2); Fact 8; Section 4.1.2",
+      "statement_contract": "Use the logarithmic-space many-one, state-layering construction that eliminates full zero tests, not Lemma 3's later dimension-preserving Turing reduction; compose it with the MELL-to-fork-free-BVASS-with-zero-tests reduction of Proposition 7(2), retaining its restricted classical-to-intuitionistic translation dependencies and proving fork-free preservation.",
+      "status": "to_formalize"
+    },
+    {"id": "CONE_CLOSURE", "locator": "narrow rational-closure consequence attributed to POPL 2011 Theorem 3.5", "status": "primary_passage_open_or_prove_locally"}
+  ]
+}

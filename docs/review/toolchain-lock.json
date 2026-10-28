@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "generated": "2026-10-17",
+  "platform": "macOS Darwin 23.6.0 arm64 host with x86_64 userland",
+  "opam": "2.0.8",
+  "switch": {
+    "kind": "local",
+    "path": "_opam",
+    "ocaml": "4.14.2",
+    "flambda": true
+  },
+  "packages": {
+    "coq": "8.20.1",
+    "coq-yalla": "2.0.6",
+    "coq-kruskal-trees": "1.5",
+    "coq-kruskal-finite": "1.5",
+    "coq-kruskal-almostfull": "1.2",
+    "coq-kruskal-fan": "1.2",
+    "coq-kruskal-higman": "1.3",
+    "coq-kruskal-veldman": "1.3",
+    "coq-kruskal-theorems": "1.2",
+    "coq-mathcomp-bigenough": "1.0.3",
+    "coq-mathcomp-ssreflect": "dev@9ad1c11c59a3928ed5e9e429f857b8061ab4eaf0",
+    "coq-mathcomp-fingroup": "dev@9ad1c11c59a3928ed5e9e429f857b8061ab4eaf0",
+    "coq-mathcomp-algebra": "dev@9ad1c11c59a3928ed5e9e429f857b8061ab4eaf0",
+    "coq-mathcomp-finmap": "dev@65467caeaa4b744d1baa11f21e09b7971dd55c0c",
+    "coq-polyhedra": "dev@f8b8ce8ebf2516ea1ee4aa6385435204c04d0b5a"
+  },
+  "vendored_sources": {
+    "Armael/minicooper": {
+      "commit": "3f051307039456a88cf093921278b0dcf224f7cf",
+      "archive_sha256": "81539eaea305f0a02a270ee71a489be15474f955c5b5b8a46ce06e6ab54140b1",
+      "license": "LGPL-3.0-only",
+      "upstream_license_sha256": "a5681bf9b05db14d86776930017c647ad9e6e56ff6bbcfdf21e5848288dfaf1b",
+      "vendored_license_sha256": "e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118",
+      "files": ["MyTactics.v", "LinSimpl.v", "Constant.v", "Theory.v"]
+    }
+  },
+  "floating_dependencies": false
+}

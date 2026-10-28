@@ -1,0 +1,47 @@
+From Mell.VAS Require Import SemilinearRelationDecomposition
+  AlmostSemilinearProjection Corollary63 StatefulVAS
+  AlmostSemilinearCoordinateProjection StatefulAlmostSemilinear.
+
+Check SemilinearNRelation.
+Check semilinear_nrelation_finite_linear_decomposition.
+Check plain_vas_reach_inter_semilinear.
+Check asymptotically_definable_nrelation_source_projection.
+Check asymptotically_definable_nrelation_target_projection.
+Check almost_semilinear_nrelation_source_projection.
+Check almost_semilinear_nrelation_target_projection.
+Check almost_semilinear_nset_finite_union.
+Check corollary_6_3_plain_post_inter_almost_semilinear.
+Check corollary_6_3_plain_pre_inter_almost_semilinear.
+
+Check SConfig.
+Check VASTransition.
+Check VAS.
+Check VASReach.
+Check DirectVASReach.
+Check direct_vas_reach_encoded.
+Check encoded_vas_reach_direct.
+Check vas_reach_direct_iff.
+Check erase_vas_states.
+Check vas_start_step_nth.
+Check vas_finish_step_nth.
+
+Check StatefulRelationSemilinear.
+Check StatefulRelationAlmostSemilinear.
+Check StatefulSemilinear.
+Check StatefulAlmostSemilinear.
+Check state_pair_reach_inter_semilinear.
+Check vas_reach_relation_inter_semilinear.
+Check state_pair_post_inter_almost_semilinear.
+Check vas_post_inter_semilinear.
+
+Print Assumptions semilinear_nrelation_finite_linear_decomposition.
+Print Assumptions plain_vas_reach_inter_semilinear.
+Print Assumptions asymptotically_definable_nrelation_source_projection.
+Print Assumptions almost_semilinear_nrelation_target_projection.
+Print Assumptions corollary_6_3_plain_post_inter_almost_semilinear.
+Print Assumptions corollary_6_3_plain_pre_inter_almost_semilinear.
+Print Assumptions direct_vas_reach_encoded.
+Print Assumptions encoded_vas_reach_direct.
+Print Assumptions vas_reach_direct_iff.
+Print Assumptions vas_reach_relation_inter_semilinear.
+Print Assumptions vas_post_inter_semilinear.

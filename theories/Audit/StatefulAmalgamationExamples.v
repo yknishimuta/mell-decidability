@@ -1,0 +1,15 @@
+From Mell.BVASS Require Import StatefulAmalgamation.
+
+Check run_node_count.
+Check subrun_replacement_exact.
+Check amalgamate_context_extensions.
+Check inserted_family_amalgamation_mut.
+Check inserted_family_amalgamation.
+Check stateful_context_order_amalgamation.
+Check stateful_context_transfer_lemma_8.
+
+Print Assumptions subrun_replacement_exact.
+Print Assumptions amalgamate_context_extensions.
+Print Assumptions inserted_family_amalgamation.
+Print Assumptions stateful_context_order_amalgamation.
+Print Assumptions stateful_context_transfer_lemma_8.

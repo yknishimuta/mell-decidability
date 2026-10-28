@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite this repository using these metadata and identify the Git commit used."
+type: software
+title: "Mechanized Decidability of Propositional MELL"
+authors:
+  - given-names: Yuki
+    family-names: Nishimuta
+repository-code: "https://github.com/yknishimuta/mell-decidability"
+version: 1.0.0
+keywords:
+  - MELL
+  - linear logic
+  - decidability
+  - Coq
+  - formal verification

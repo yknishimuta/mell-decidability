@@ -1,0 +1,73 @@
+MELL formalization third-party notices
+======================================
+
+The root MIT license applies only to project-owned work. It does not replace
+the licenses identified below.
+
+Bundled source
+--------------
+
+- MiniCooper Gallina core by Armaël Guéneau, François Pottier, and
+  contributors, from Armael/minicooper at commit
+  3f051307039456a88cf093921278b0dcf224f7cf — LGPL-3.0-only. The vendored
+  subset is MyTactics.v, LinSimpl.v, Constant.v, and Theory.v; the
+  Template-Coq tactic frontend is not included. Its authorship notice and
+  LGPLv3 text are retained in vendor/minicooper/NOTICE and
+  vendor/minicooper/LICENSE. The GPLv3 text incorporated by LGPLv3 is at
+  LICENSES/GPL-3.0-only.txt. Coq 8.20 compatibility changes are recorded in
+  vendor/minicooper/PORTING.md.
+
+External build dependencies
+---------------------------
+
+The following packages are not vendored into the normal Git source tree.
+Their own licenses govern their source and compiled artifacts.
+
+- Coq 8.20.1 — LGPL-2.1-only.
+- YALLA 2.0.6 — LGPL-3.0-or-later.
+- Kruskal Trees, Finite, AlmostFull, Fan, Higman, Veldman, and Theorems —
+  MPL-2.0.
+- Coq-Polyhedra, its pinned MathComp/Finmap forks, and bigenough — CeCILL-B.
+- OCaml 4.14.2, `ocamlfind` 1.9.9~preview, and Zarith 1.14 retain their own
+  licenses; Zarith is LGPL-2.0-only with the OCaml linking exception.
+
+Extraction source and notice boundary
+-------------------------------------
+
+This clean public Git history does not contain generated OCaml `.ml` or `.mli`
+files. Generated extraction output is a build product and remains ignored.
+When generated or distributed, that output can contain translated
+implementations from these sources:
+
+- the Coq 8.20.1 standard library and standard OCaml extraction mappings,
+  copyright INRIA, CNRS, and contributors, under LGPL-2.1-only. The license
+  text is at `LICENSES/LGPL-2.1-only.txt`; the pinned upstream source is
+  `https://github.com/rocq-prover/rocq/tree/V8.20.1`;
+- MiniCooper's `Constant.v`, `LinSimpl.v`, and `Theory.v`, under
+  LGPL-3.0-only, with authorship, license, pinned source, and local port
+  information at `vendor/minicooper/NOTICE`, `vendor/minicooper/LICENSE`, and
+  `vendor/minicooper/PORTING.md`;
+- YALLA 2.0.6 and its included OLlibs 2.0.7 subtree, principally by Olivier
+  Laurent, with OLlibs contributions by Olivier Laurent and Christophe Lucas,
+  under LGPL-3.0-or-later. The LGPLv3 text is also present at
+  `vendor/minicooper/LICENSE`, the incorporated GPLv3 text is at
+  `LICENSES/GPL-3.0-only.txt`, and the pinned source archive is
+  `https://github.com/olaure01/yalla/archive/v2.0.6.tar.gz` with SHA-256
+  `a3eff3e456333e72a85c758530588d6d7c7ee071b9e56b013245b55e540e8e9c`.
+
+Generated files incorporating those implementations are not wholly
+MIT-licensed. Exact fixed source versions, archive checksums, and extraction
+reconstruction instructions are recorded in
+`docs/third-party-source-reproduction.md`.
+
+The earlier development history is preserved separately and is not part of
+this public repository. Creating this clean history does not alter old Git
+blobs or determine or cure any legal question concerning an earlier
+distribution. Historical LGPL compliance remains unresolved.
+
+A future release that distributes newly generated OCaml source or binaries
+requires a release-specific review of the applicable Coq, YALLA, MiniCooper,
+Zarith, and other incorporated third-party conditions.
+
+Exact source versions, commits, and archive checksums are recorded in
+docs/review/sources.json.

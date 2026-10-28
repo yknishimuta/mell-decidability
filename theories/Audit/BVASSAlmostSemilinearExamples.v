@@ -1,0 +1,23 @@
+From Mell.BVASS Require Import AlmostSemilinear.
+
+Check VASSSectionOf.
+Check bvass_reach_is_vass_section.
+Check project_nset_cone.
+Check asymptotically_definable_nset_coordinate_projection.
+Check almost_semilinear_nset_coordinate_projection.
+Check finite_nvec_set_semilinear.
+Check section_initial_set_semilinear.
+Check SectionTargetSet.
+Check section_target_set_semilinear.
+Check vass_section_inter_semilinear.
+Check bvass_reach_inter_semilinear.
+
+Print Assumptions project_nset_cone.
+Print Assumptions almost_semilinear_nset_coordinate_projection.
+Print Assumptions section_initial_set_semilinear.
+Print Assumptions section_target_set_semilinear.
+Print Assumptions vass_section_inter_semilinear.
+Print Assumptions bvass_reach_is_vass_section.
+Print Assumptions bvass_reach_inter_semilinear.
+Print All Dependencies bvass_reach_is_vass_section.
+Print All Dependencies bvass_reach_inter_semilinear.

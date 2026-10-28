@@ -1,0 +1,16 @@
+MiniCooper Gallina core
+
+Upstream: https://github.com/Armael/minicooper
+Pinned commit: 3f051307039456a88cf093921278b0dcf224f7cf
+Authors: Armaël Guéneau and the MiniCooper contributors
+License: GNU Lesser General Public License version 3 (see LICENSE)
+
+Files vendored: MyTactics.v, LinSimpl.v, Constant.v, Theory.v.
+The Template-Coq tactic frontend is intentionally excluded.
+
+Coq 8.20.1 port changes are proof-only:
+- replaced the removed Omega import with ZArith and Lia;
+- replaced omega tactic invocations with lia;
+- adjusted five proof scripts for Coq 8.20 goal-closing/bullet behavior.
+
+No computational definition or semantic statement was changed.

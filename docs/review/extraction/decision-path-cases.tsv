@@ -1,0 +1,11 @@
+path-mell-one	unit
+path-mell-identity	goal-saturation
+path-mell-par-identity	goal-saturation
+path-mell-tensor-units	unit
+path-mell-bang-one	unit
+path-mell-empty	weight
+path-mell-two-ones	weight
+path-mell-mismatched-atoms	fallback
+path-small-scan	par-mismatch=fallback;tensor-mismatch=fallback;identity-extra-atom=fallback;bottom-one=goal-saturation;two-bottom-one=goal-saturation
+fallback-bvas-initial	true
+fallback-bvas-empty	false

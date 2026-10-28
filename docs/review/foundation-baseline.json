@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "stage": "T01",
+  "classification": {
+    "foundational_principles": [],
+    "unproved_mathematical_axioms": []
+  },
+  "observed": {
+    "declarations_checked": 8,
+    "result": "Closed under the global context"
+  },
+  "policy": {
+    "allow_wildcards": false,
+    "record_exact_name_and_type": true,
+    "conditional_theorems_are_not_closed_results": true
+  },
+  "evidence": "docs/review/logs/audit-core.log"
+}

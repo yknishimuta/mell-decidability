@@ -1,0 +1,53 @@
+codec-sequent-roundtrip	true
+codec-sequent-duplicate	true
+codec-sequent-invalid	true
+codec-reach-roundtrip	true
+codec-reach-invalid	true
+codec-run-roundtrip	true
+codec-semi-roundtrip	true
+codec-semi-d0	true
+codec-vector-invalid	true
+run-leaf	true
+run-unary	true
+run-binary-duplicate	true
+run-bad-action	true
+run-bad-arity	true
+run-bad-initial	true
+run-negative-intermediate	true
+invariant-even-accept	true
+invariant-closure-reject	false
+invariant-initial-reject	false
+invariant-target-reject	false
+presburger-exists-true	true
+presburger-exists-false	false
+presburger-forall-true	true
+presburger-forall-false	false
+presburger-nested	true
+presburger-divisible	true
+fast-unit-yes	true
+fast-unit-no	false
+fast-unit-exponential	true
+fast-weight-refutes	true
+fast-weight-not-applicable	false
+fast-goal-yes	Some true
+fast-goal-none	None
+fast-full-yes	Some true
+fast-full-no	Some false
+stage-bvas-yes	Some true
+stage-bvas-mismatch	None
+stage-bvas-no	Some false
+stage-mell-yes	Some true
+stage-mell-no	Some false
+fuel-zero	None
+fuel-one-yes	Some true
+fuel-one-no	Some false
+big-nat-add	1208925819614629174706177
+codec-nat-big	true
+big-nat-sub	7
+big-z-cancel	0
+z-div-negative	-3
+z-mod-negative	2
+signed-action	true
+decide-code-invalid	false
+public-mell-yes	true
+public-mell-no	false

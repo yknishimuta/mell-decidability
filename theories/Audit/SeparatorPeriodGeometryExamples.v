@@ -1,0 +1,29 @@
+From Mell.Separator Require Import DoubledRelation TransformerPeriod DirectedRuns.
+
+Check SpecialLeafReach.
+Check doubled_system.
+Check doubled_marker_one_iff.
+Check lemma_4_6_special_leaf_inter_semilinear.
+Check lemma_4_10_special_transformer_asymptotically_definable.
+
+Check IRunPeriod.
+Check irun_period_periodic.
+Check irun_period_structural_decomposition.
+Check lemma_4_11_irun_period_asymptotically_definable.
+
+Check DirectedIRun.
+Check DirectedOffset.
+Check DirectedPeriod.
+Check DirectedClosedPeriod.
+Check directed_run_targets.
+Check directed_period_cone_iff.
+Check lemma_3_12_directed_closed_period_finitely_generated.
+
+Check IRunOccurrence.
+Check irun_occurrence_lift.
+Check DirectedIRunEdge.
+Check directed_edge_translated_offset_inclusion.
+Check translated_difference_inclusion.
+Check translated_period_cone_closure.
+Check lemma_3_13_directed_closed_period_inclusion.
+Check mutually_reachable_equal_cones_closed_period_equal.

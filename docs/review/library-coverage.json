@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "stage": "T01",
+  "libraries": {
+    "yalla": {
+      "module": "Yalla.mell_mset",
+      "checked": ["mell2mellfrag", "mellfrag2mell", "cut_r"],
+      "use": "MELL fragment equivalence and cut admissibility",
+      "status": "imported"
+    },
+    "kruskal": {
+      "module": "KruskalThmProp.kruskal_theorems",
+      "checked": ["af_ltree_homeo_embed"],
+      "use": "Prop-valued almost-full theorem for ordered trees",
+      "status": "imported"
+    },
+    "polyhedra": {
+      "modules": ["Polyhedra.hpolyhedron", "Polyhedra.polyhedron", "Polyhedra.poly_base"],
+      "checked": ["HPolyhedron.farkas", "cone", "in_coneP", "face_set", "face_setP"],
+      "use": "Farkas, finitely generated cones, and faces",
+      "status": "imported",
+      "not_claimed": ["Gordan lemma", "rational cone closure finite generation"]
+    },
+    "constructive_epsilon": {
+      "module": "Coq.Logic.ConstructiveEpsilon",
+      "checked": ["constructive_indefinite_ground_description_nat"],
+      "use": "total search over decidable natural-number stages",
+      "status": "imported"
+    }
+  }
+}

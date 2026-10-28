@@ -1,0 +1,8 @@
+presburger_decide_correct
+     : forall s : sentence,
+       presburger_decide s = true <-> sentence_semantics s
+sentence_environment_independent
+     : forall (s : sentence) (env : environment),
+       formula_semantics env (sentence_formula s) <-> sentence_semantics s
+Axioms:
+Classical_Prop.classic : forall P : Prop, P \/ ~ P
