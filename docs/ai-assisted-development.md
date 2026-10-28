@@ -1,6 +1,6 @@
 # AI-Assisted Development
 
-**Project:** Mechanized Decidability of Propositional MELL  
+**Project:** A Rocq Formalization of the Decidability of Propositional MELL via BVAS reachability  
 **Record date:** 2026-10-27
 
 ## AI use

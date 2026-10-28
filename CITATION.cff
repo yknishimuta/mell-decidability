@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite this repository using these metadata and identify the Git commit used."
 type: software
-title: "Mechanized Decidability of Propositional MELL"
+title: "A Rocq Formalization of the Decidability of Propositional MELL via BVAS reachability"
 authors:
   - given-names: Yuki
     family-names: Nishimuta
