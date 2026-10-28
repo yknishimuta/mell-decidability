@@ -129,6 +129,14 @@ Responsibility for the correctness, integrity, and interpretation of the publish
 
 ## Reproducibility and citation
 
-Use the Git commit being cited together with `mell-formalization.opam.locked` and `docs/review/sources.json`. The final theorem, extraction, runtime, and independent-review evidence is summarized in `docs/review/final-trust-report.md`; task-specific audit files preserve the proof and correction history.
+To reproduce a specific version of this formalization, check out the corresponding Git commit or release tag (`v1.0.0`). The locked dependency versions are recorded in [`mell-formalization.opam.locked`](mell-formalization.opam.locked), while [`docs/review/sources.json`](docs/review/sources.json) identifies the external mathematical and software sources used in the development.
 
-For academic citation, cite both the repository commit and the primary mathematical sources listed in `docs/review/sources.json`.
+The verification results for the main theorems, OCaml extraction, runtime tests, and independent reviews are summarized in [`docs/review/final-trust-report.md`](docs/review/final-trust-report.md). Additional task-specific audit reports document proof dependencies, mathematical corrections, and verification details. The correspondence between published mathematical results and their formalized Rocq counterparts is provided in [`docs/mathematical-provenance.md`](docs/mathematical-provenance.md).
+
+**Citation.** Version 1.0.0 of this formalization is archived on Zenodo and has a persistent, version-specific DOI:
+
+**[https://doi.org/10.5281/zenodo.23727565](https://doi.org/10.5281/zenodo.23727565)**
+
+When citing this formalization in academic work, please use the version-specific Zenodo DOI. For precise identification of a source revision, also include the corresponding Git commit hash. Bibliographic metadata is provided in [`CITATION.cff`](CITATION.cff).
+
+When discussing the underlying mathematical results, please also cite the relevant original publications listed in [`docs/mathematical-provenance.md`](docs/mathematical-provenance.md).
