@@ -26,12 +26,16 @@ untracked files are never mutated.
    `PaperFidelityExamples`, `DecisionPathAudit`, and `DecisionPathExamples`.
    Its artifact mode requires a normal `.vo` for every registered source and
    rejects `.vos` as a substitute.
-2. `check-coq-source-policy.sh` rejects `Axiom`, `Admitted`, `admit`, and
-   `Abort` declarations across every Git-tracked `.v`, including modules that
-   are not dependencies of the final decision theorem.  This complements,
-   rather than replaces, `Print Assumptions` for the public theorem closure.
-   `check-assumption-allowlist.sh` also parses the actual public
-   `Print Assumptions` transcript and accepts only `Classical_Prop.classic`.
+2. `check-coq-source-policy.sh` lexically removes nested Coq comments and
+   strings, then rejects proof escapes, global `Axiom`/`Parameter`
+   declarations, and unsafe guard/positivity/universe/type-in-type settings
+   across every Git-tracked project `.v` outside `vendor/`.  A `Parameter` in
+   a `Module Type` signature remains valid.  This complements, rather than
+   replaces, `Print Assumptions` for the public theorem closure.
+   `check-assumption-allowlist.sh` now requires explicit theorem begin/end
+   markers and an independent eight-theorem manifest, parses multiline Coq
+   dependency output fail-closed, and accepts only the exact displayed name
+   `Classical_Prop.classic`.
 3. Runtime expectations and their independently checked mandatory name sets
    are stored in explicit manifests.  The common
    runner requires exactly 22 public runtime cases and 11 decision-path cases.
@@ -48,6 +52,10 @@ untracked files are never mutated.
    already reviewed total of ten standard-extraction `Obj.magic` occurrences.
 7. The existing Makefile already sets Bash `-eu -o pipefail`.  The injected
    Coq error confirms that the `coqc | tee` path exits nonzero in practice.
+8. `audit-final` runs full `Makefile.coq validate`, captures the Coq 8.20.1
+   `coqchk -silent -o` context summary, and requires the type-in-type, unsafe
+   `(co)fixpoints`, and positivity-assumed sections to occur exactly once and
+   contain `<none>`. Missing or malformed sections fail closed.
 
 ## Fault-injection results
 
@@ -74,13 +82,31 @@ fault's exit code and the decisive diagnostic.
 | 16 | extraction output | inserted `AXIOM TO BE REALIZED` | 1 | unrealized axiom printed and rejected |
 | 17 | extraction trust | inserted an eleventh `Obj.magic` | 1 | audited count changes from 10 to 11 |
 | 18 | extraction freshness | left a stale sentinel and broke `Extract.v` | 2 | stale files are deleted; fresh extraction fails at the Coq error instead of compiling old OCaml |
+| 19 | assumptions parser | dependency name `AuditGateProbe.forbidden'` | 1 | exact apostrophe-bearing name reported as unauthorized |
+| 20 | assumptions parser | other unauthorized qualified dependency | 1 | `Other.forbidden` reported |
+| 21 | assumptions parser | `nonterminating is assumed to be guarded.` | 1 | unknown/safety dependency line rejected |
+| 22 | assumptions completeness | empty log | 1 | `audit log is empty` |
+| 23 | assumptions completeness | truncated block | 1 | unterminated theorem block reported |
+| 24 | assumptions identity | expected theorem replaced by another marker | 1 | expected/actual theorem mismatch reported |
+| 25 | assumptions format | unknown dependency line | 1 | unrecognized output rejected fail-closed |
+| 26 | assumptions availability | missing log | 1 | missing path reported |
+| 27 | coqchk safety | populated unsafe `(co)fixpoints` section | 1 | offending section and constant reported |
+| 28 | coqchk completeness | omitted positivity-assumed section | 1 | missing required section reported |
+| 29 | source policy | global `Parameter` | 1 | global declaration reported; `Module Type` baseline passes |
+| 30 | source policy | global `Axiom` | 1 | global declaration reported |
+| 31 | source policy | `Unset Guard Checking.` | 1 | exact unsafe setting reported |
+| 32 | source policy | `Unset Positivity Checking.` | 1 | exact unsafe setting reported |
+| 33 | source policy | `Unset Universe Checking.` | 1 | exact unsafe setting reported |
+| 34 | source policy | `Set Type in Type.` | 1 | exact unsafe setting reported |
+| 35 | integrated `audit-final` | registered/compiled theorem using `Parameter forbidden' : False` | 2 | `forged_claim: unauthorized assumption: forbidden'`; recovery audit passes |
+| 36 | integrated `audit-final` | registered/compiled unsafe fixpoint and inherited false theorem | 2 | `inherited_false: ... nonterminating is assumed to be guarded.`; recovery audit passes |
 
-Result: **18/18 injected faults detected**, with baseline PASS and post-restore
+Result: **36/36 injected faults detected**, with baseline PASS and post-restore
 PASS for every case.
 
 ## Completeness and coqchk boundary
 
-At the baseline there are 268 Git-tracked Coq sources and exactly 268
+At the 2026-11-23 remediation baseline there are 269 Git-tracked Coq sources and exactly 269
 `_CoqProject` source entries.  The full Makefile-generated `validate` target
 passes all registered `.vo` files to `coqchk -silent`; the structural checker
 prevents a tracked source from disappearing from that closure.  Artifact mode
@@ -120,9 +146,9 @@ trust audit and this explicit expectation together.
 
 The following fresh checks passed on 2026-10-27:
 
-- isolated negative suite: 18/18 injected faults detected; every baseline and
+- isolated negative suite: 36/36 injected faults detected; every baseline and
   post-restore check passed;
-- source/artifact scope: 268 tracked sources exactly matched 268
+- source/artifact scope: 269 tracked sources exactly matched 269
   `_CoqProject` entries, and every entry had a normal `.vo`;
 - forced full `Makefile.coq` rebuild: exit 0;
 - `make -f Makefile.coq validate`: exit 0, including the complete registered

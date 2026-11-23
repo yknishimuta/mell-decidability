@@ -1,0 +1,8 @@
+proved_singleton_separator
+bvas_decide_true_iff
+bvas_decide_false_iff
+mell_decide_true_iff
+mell_decide_false_iff
+mell_decide_with_cut
+mell_search_halts
+decide_code_correct

@@ -53,7 +53,7 @@ of a source result is stated explicitly in its row.
 | BLS-v1 | Clotilde Bizière, Jérôme Leroux, and Grégoire Sutre, “Solving the Reachability Problem for Branching Vector Addition Systems via Semilinear Inductive Invariants,” arXiv:2607.09558v1, 10 July 2026. [HTML](https://arxiv.org/html/2607.09558v1), [PDF](https://arxiv.org/pdf/2607.09558v1). | Sections 2–7 and Appendices A–C; PDF SHA-256 `61ca188e9899b911de5662a3b0672653e9d0a3d58d2ae39d34a870a46b5fa422`. Principal source for semilinear BVAS separation. |
 | BLS-FoSSaCS | Clotilde Bizière, Jérôme Leroux, and Grégoire Sutre, “Bridging the Gap Between Plain VASS and Branching VASS,” *FoSSaCS 2026*, LNCS 16503, pp. 65–87. [DOI](https://doi.org/10.1007/978-3-032-22730-0_4). | Proposition 5; Lemmas 6, 8, 9, and 11; Theorem 12; Corollaries 7 and 14. Principal source for the BVASS-to-VASS-section chain. |
 | Leroux-2012 | Jérôme Leroux, “Vector Addition Systems Reachability Problem (A Simpler Solution),” *Turing-100*, EPiC Series in Computing 10 (2012), pp. 214–228. [DOI](https://doi.org/10.29007/bnx2), [publisher copy](https://easychair.org/publications/paper/Blr/open). | The 2012 EPiC edition, especially Sections 3–6 and Corollary 6.3 on printed p. 224. Numbering is not imported from another edition. |
-| LS-2015 | Ranko Lazić and Sylvain Schmitz, “Non-Elementary Complexities for Branching VASS, MELL, and Extensions,” *ACM Transactions on Computational Logic* 16(3), Article 20 (2015), pp. 20:1–20:30. [DOI](https://doi.org/10.1145/2733375), [author PDF](https://lsv.ens-paris-saclay.fr/Publis/PAPERS/PDF/LS-tocl15.pdf). | Author PDF matching arXiv:1401.6785v2; Lemma 3's first construction, Fact 8, Section 4.1.2 and Claim 9.1. Proposition 7(2) is recorded but is not misidentified with the ordinary-MELL reduction proved here. |
+| LS-2015 | Ranko Lazić and Sylvain Schmitz, “Non-Elementary Complexities for Branching VASS, MELL, and Extensions,” *ACM Transactions on Computational Logic* 16(3), Article 20 (2015), pp. 20:1–20:30. [DOI](https://doi.org/10.1145/2733375), [author PDF](https://lsv.ens-paris-saclay.fr/Publis/PAPERS/PDF/LS-tocl15.pdf). | Author PDF matching arXiv:1401.6785v2; Lemma 3's first construction, Fact 8, Section 4.1.2 and Claim 9.1. Proposition 7(2) includes the ordinary LL/MELL route while also recording affine/contractive variants. |
 | Leroux-2011 | Jérôme Leroux, “Vector Addition System Reachability Problem: A Short Self-Contained Proof,” *POPL 2011*, pp. 307–316. | BLS-v1 attributes a rational-cone characterization to Theorem 3.5.  The exact primary passage was not retained in the source registry, so that theorem-number correspondence remains **UNVERIFIED**; the needed direction is proved locally instead. |
 | Schrijver-1999 | Alexander Schrijver, *Theory of Linear and Integer Programming*, Wiley, 1999. | BLS-v1 cites Corollary 7.1b in its Lemma 6.6 argument.  This development proves the needed finite-basis result locally, so no theorem from the book is an unchecked dependency. |
 
@@ -159,7 +159,7 @@ generalization to arbitrary full periodic sets.
 | BLS-v1, Appendix B Lemma B.1 | `Mell.BVAS.RunOrderAntisymmetry.irun_le_antisymmetric`; `Mell.Order.FiniteBasis.irun_le_wqo`; `Mell.Order.FiniteBasis.irun_le_finite_cover` | [`theories/BVAS/RunOrderAntisymmetry.v`](../theories/BVAS/RunOrderAntisymmetry.v), [`theories/Order/FiniteBasis.v`](../theories/Order/FiniteBasis.v) | EXACT conclusion; corrected formalization boundary | R03 | [historical ledger audit](review/doc-prov-r-historical-repair-ledger.md) |
 | BLS-v1, Appendix B Lemma B.2 | `Mell.BVAS.Amalgamation.run_amalgamation` | [`theories/BVAS/Amalgamation.v`](../theories/BVAS/Amalgamation.v) | EXACT after B.3 proof repair | R04 | [repair counterexample](../theories/Audit/RepairExamples.v) |
 | BLS-v1, Appendix B Fact B.3 | `Mell.BVAS.RunOrder.root_same_action_mono` | [`theories/BVAS/RunOrder.v`](../theories/BVAS/RunOrder.v) | REPAIRED standalone statement | R04 | [repair counterexample](../theories/Audit/RepairExamples.v) |
-| BLS-v1, Appendix B Fact B.4 | `Mell.BVAS.RunOrder.context_lift` | [`theories/BVAS/RunOrder.v`](../theories/BVAS/RunOrder.v) | EXACT after B.3 proof repair | R04 | [fidelity audit](review/arxiv-2607.09558v1-fidelity-audit.md) |
+| BLS-v1, Appendix B Fact B.4 | `Mell.BVAS.Amalgamation.context_embed`; downstream `Mell.BVAS.RunOrder.context_lift` | [`theories/BVAS/Amalgamation.v`](../theories/BVAS/Amalgamation.v), [`theories/BVAS/RunOrder.v`](../theories/BVAS/RunOrder.v) | DIRECT/EXACT embedding; separate substitution/validity lift | R04 | [fidelity audit](review/arxiv-2607.09558v1-fidelity-audit.md) |
 | BLS-v1, Lemma 3.12 | `Mell.Separator.DirectedRuns.lemma_3_12_directed_closed_period_finitely_generated` | [`theories/Separator/DirectedRuns.v`](../theories/Separator/DirectedRuns.v) | EXACT | none | [Task 11-A audit](review/t11-a-doubled-period-geometry-audit.md) |
 | BLS-v1, Lemma 3.13 | `Mell.Separator.DirectedRuns.lemma_3_13_directed_closed_period_inclusion` | [`theories/Separator/DirectedRuns.v`](../theories/Separator/DirectedRuns.v) | EXACT | none | [Task 11-A audit](review/t11-a-doubled-period-geometry-audit.md) |
 
@@ -175,10 +175,10 @@ quotient, UIP, or proof irrelevance.
 
 | Source result | Rocq theorem | Location | Relation | Repair | Evidence |
 |---|---|---|---|---|---|
-| BLS-v1, Lemma 4.3 | `Mell.VAS.PeriodicIntersection.periodic_cone_intersection` and projection/sum bridges | [`theories/VAS/PeriodicIntersection.v`](../theories/VAS/PeriodicIntersection.v) | DERIVED | none | [fidelity audit](review/arxiv-2607.09558v1-fidelity-audit.md) |
+| BLS-v1, Lemma 4.3 | `Mell.VAS.PeriodicIntersection.periodic_cone_intersection`, signed sum lemmas, and nonnegative relation projection bridges | [`theories/VAS/PeriodicIntersection.v`](../theories/VAS/PeriodicIntersection.v) | REQUIRED SPECIALIZATIONS / DERIVED; no single full signed closure package | none | [fidelity audit](review/arxiv-2607.09558v1-fidelity-audit.md) |
 | BLS-v1, Lemma 4.4 | `Mell.Geometry.ClosedLinearizationL2.closed_linearization_finitely_generated` | [`theories/Geometry/ClosedLinearizationL2.v`](../theories/Geometry/ClosedLinearizationL2.v) | EXACT | none | [Task 11-A audit](review/t11-a-doubled-period-geometry-audit.md) |
-| BLS-v1, Lemma 4.5 | `Mell.Separator.TransformerPeriod.lemma_4_5_periodic_almost_semilinear_relation` | [`theories/Separator/TransformerPeriod.v`](../theories/Separator/TransformerPeriod.v) | EXACT conclusion; REPAIRED proof boundary | R01 | [repair regression](../theories/Audit/RepairExamples.v) |
-| BLS-v1, Lemma 4.6 | `Mell.Separator.DoubledRelation.lemma_4_6_special_leaf_inter_semilinear` | [`theories/Separator/DoubledRelation.v`](../theories/Separator/DoubledRelation.v) | EXACT conclusion; corrected construction order | R02 | [Task 11-A audit](review/t11-a-doubled-period-geometry-audit.md) |
+| BLS-v1, Lemma 4.5 | `Mell.Separator.TransformerPeriod.lemma_4_5_periodic_almost_semilinear_relation` | [`theories/Separator/TransformerPeriod.v`](../theories/Separator/TransformerPeriod.v) | DOWNSTREAM-NEEDED NONNEGATIVE `NRelation` VERSION; paper statement is signed | R01 proof equality | [repair regression](../theories/Audit/RepairExamples.v) |
+| BLS-v1, Lemma 4.6 | `Mell.Separator.DoubledRelation.lemma_4_6_special_leaf_inter_semilinear` | [`theories/Separator/DoubledRelation.v`](../theories/Separator/DoubledRelation.v) | EXACT conclusion; carries arbitrary semilinear `H` through the paper's marker-one restriction | R02 construction completion | [Task 11-A audit](review/t11-a-doubled-period-geometry-audit.md) |
 | BLS-v1, Lemma 4.7 | `Mell.Geometry.CenterPushIn.closed_linearization_push_in` | [`theories/Geometry/CenterPushIn.v`](../theories/Geometry/CenterPushIn.v) | EXACT | none | [fidelity audit](review/arxiv-2607.09558v1-fidelity-audit.md) |
 | BLS-v1, Lemma 4.8 | `Mell.Geometry.CenterCharacterization.center_characterization` | [`theories/Geometry/CenterCharacterization.v`](../theories/Geometry/CenterCharacterization.v) | EXACT | none | [fidelity audit](review/arxiv-2607.09558v1-fidelity-audit.md) |
 | BLS-v1, Lemma 4.9 | `Mell.Geometry.CenterAbsorption.center_absorbs_closed_linearization` | [`theories/Geometry/CenterAbsorption.v`](../theories/Geometry/CenterAbsorption.v) | EXACT | none | [fidelity audit](review/arxiv-2607.09558v1-fidelity-audit.md) |
@@ -198,12 +198,12 @@ two-dimensional counterexample distinguishes the two sets.
 | BLS-v1, Corollary 5.3 | `Mell.WSVAS.Amalgamation.corollary_5_3_wsvas_run_scaling` | [`theories/WSVAS/Amalgamation.v`](../theories/WSVAS/Amalgamation.v) | EQUIVALENT | none | [Task 11-B audit](review/t11-b-wsvas-amalgamation-audit.md) |
 | BLS-v1, Lemma 5.4 | `Mell.WSVAS.SafeLinearization.lemma_5_4_wsvas_safe_linearization` | [`theories/WSVAS/SafeLinearization.v`](../theories/WSVAS/SafeLinearization.v) | EXACT | none | [Task 11-C audit](review/t11-c-safe-linearization-audit.md) |
 | BLS-v1, Lemma 5.5 (WSVAS equality) | `Mell.WSVAS.Runs.valid_ws_run_step_star`; `Mell.Separator.SafeLinearization.ws_step_star_has_run` | [`theories/WSVAS/Runs.v`](../theories/WSVAS/Runs.v), [`theories/Separator/SafeLinearization.v`](../theories/Separator/SafeLinearization.v) | DERIVED | none | [fidelity audit](review/arxiv-2607.09558v1-fidelity-audit.md) |
-| BLS-v1, Lemma 5.5 (BVAS equality) | `Mell.WSVAS.BVASSimulation.lemma_5_5_bvas_wsvas_reach_iff` | [`theories/WSVAS/BVASSimulation.v`](../theories/WSVAS/BVASSimulation.v) | EQUIVALENT | none | [Task 11-B audit](review/t11-b-wsvas-amalgamation-audit.md) |
+| BLS-v1, Lemma 5.5 (BVAS equality) | `Mell.WSVAS.BVASSimulation.lemma_5_5_bvas_wsvas_reach_iff`; extensional/closure bridge at its calls in `SafeLinearization.v` | [`theories/WSVAS/BVASSimulation.v`](../theories/WSVAS/BVASSimulation.v), [`theories/Separator/SafeLinearization.v`](../theories/Separator/SafeLinearization.v) | SUFFICIENT SPECIALIZATION FOR LEMMA 5.1: `I = Reach(S) union denote(code)`, not arbitrary `I` | none | [Task 11-B audit](review/t11-b-wsvas-amalgamation-audit.md) |
 | BLS-v1, Lemma 5.6 | `Mell.Audit.PaperFidelityBridges.paper_lemma_5_6_bvas_wsvas_exists` | [`theories/Audit/PaperFidelityBridges.v`](../theories/Audit/PaperFidelityBridges.v) | EQUIVALENT / BRIDGE | none | [gap closure](review/arxiv-2607.09558v1-fidelity-gap-closure.md) |
 | BLS-v1, Lemma 5.7 | `Mell.BVAS.OneSourceReduction.lemma_5_7_one_source_reduction` | [`theories/BVAS/OneSourceReduction.v`](../theories/BVAS/OneSourceReduction.v) | EXACT conclusion; explicit leaf proof case | R06 | [Task 11-C audit](review/t11-c-safe-linearization-audit.md) |
 | BLS-v1, Appendix C Lemma C.1 | `Mell.WSVAS.RunOrder.lemma_c_1_wsrun_order_iff_higman` | [`theories/WSVAS/RunOrder.v`](../theories/WSVAS/RunOrder.v) | EXACT | none | [Task 11-B audit](review/t11-b-wsvas-amalgamation-audit.md) |
 | BLS-v1, Appendix C Corollary C.2 | `Mell.WSVAS.RunOrder.corollary_c_2_wsrun_wqo` | [`theories/WSVAS/RunOrder.v`](../theories/WSVAS/RunOrder.v) | EXACT | none | [Task 11-B audit](review/t11-b-wsvas-amalgamation-audit.md) |
-| BLS-v1, Appendix C Corollary C.3 | `Mell.WSVAS.Amalgamation.ws_run_order_stitch` and concatenation lemmas | [`theories/WSVAS/Amalgamation.v`](../theories/WSVAS/Amalgamation.v) | DERIVED | none | [fidelity audit](review/arxiv-2607.09558v1-fidelity-audit.md) |
+| BLS-v1, Appendix C Corollary C.3 | `Mell.WSVAS.Amalgamation.ws_run_order_stitch` and the recursive decomposition in the Lemma C.4 proof | [`theories/WSVAS/Amalgamation.v`](../theories/WSVAS/Amalgamation.v) | FINITE-ITERATION CONTENT DERIVED; exported helper is a single stitch | none | [fidelity audit](review/arxiv-2607.09558v1-fidelity-audit.md) |
 | BLS-v1, Appendix C Lemma C.4 | `Mell.WSVAS.Amalgamation.lemma_c_4_wsrun_exact_amalgamation` | [`theories/WSVAS/Amalgamation.v`](../theories/WSVAS/Amalgamation.v) | EXACT | none | [Task 11-B audit](review/t11-b-wsvas-amalgamation-audit.md) |
 
 The paper-shaped Lemma 5.6 has only `Semilinear A` as caller-visible
@@ -249,7 +249,7 @@ full-run coverage, homogeneity, and strict `WitnessRankLess` result.
 
 | Source result | Rocq theorem | Location | Relation | Repair | Evidence |
 |---|---|---|---|---|---|
-| Proposition 5 | `Mell.BVASS.StatefulAmalgamation.inserted_family_amalgamation`; `Mell.BVASS.StatefulAmalgamation.stateful_context_order_amalgamation` | [`theories/BVASS/StatefulAmalgamation.v`](../theories/BVASS/StatefulAmalgamation.v) | EQUIVALENT / DIRECT | R05 representation repair | [E0 audit](review/t10-e0-stateful-amalgamation-audit.md) |
+| Proposition 5 (Section 3.2) | `Mell.BVASS.StatefulAmalgamation.inserted_family_amalgamation`; `Mell.BVASS.StatefulAmalgamation.stateful_context_order_amalgamation` | [`theories/BVASS/StatefulAmalgamation.v`](../theories/BVASS/StatefulAmalgamation.v) | EXISTENTIAL ALTERNATIVE SUFFICIENT FOR LEMMA 8; the public type does not identify `merged` with the paper's specified pointwise concatenation | R05 representation repair | [E0 audit](review/t10-e0-stateful-amalgamation-audit.md) |
 | Lemma 6 | `Mell.BVASS.OrderedBridge.ordered_embed_implies_context_insert` | [`theories/BVASS/OrderedBridge.v`](../theories/BVASS/OrderedBridge.v) | NOT REQUIRED as a biconditional; one strong sufficient direction is checked | R05 | [stateful-order audit](review/t09-stateful-bvass-audit.md) |
 | Corollary 7 | `Mell.Order.FiniteBasis.context_order_wqo`; `Mell.Order.FiniteBasis.context_order_finite_cover` | [`theories/Order/FiniteBasis.v`](../theories/Order/FiniteBasis.v) | DERIVED / ALTERNATIVE PROOF | R05 | [stateful-order audit](review/t09-stateful-bvass-audit.md) |
 | Lemma 8 | `Mell.BVASS.StatefulAmalgamation.stateful_context_transfer_lemma_8` | [`theories/BVASS/StatefulAmalgamation.v`](../theories/BVASS/StatefulAmalgamation.v) | EQUIVALENT | R05-compatible occurrence path | [E0 audit](review/t10-e0-stateful-amalgamation-audit.md) |
@@ -302,12 +302,14 @@ represented by checked declarations.
 | Overall ordinary-MELL reduction | `Mell.Reduction.Main.reduce_mell_correct` | [`theories/Reduction/Main.v`](../theories/Reduction/Main.v) | DERIVED / ALTERNATIVE composition | none | [reduction audit](review/t10-f-mell-to-bvas-reduction-audit.md) |
 | Executable coded reduction | `Mell.Reduction.Main.reduce_mell_code_correct`; `Mell.Reduction.Main.reduce_mell_many_one` | [`theories/Reduction/Main.v`](../theories/Reduction/Main.v) | project-original DERIVED result | none | [reduction audit](review/t10-f-mell-to-bvas-reduction-audit.md) |
 
-Proposition 7(2) concerns affine/contractive MELL and lossy/expansive
-BVASS-with-zero-tests.  The present ordinary-MELL theorem is therefore not
-labelled an EXACT formalization of Proposition 7(2).  It composes the base
-translation in Fact 8, Claim 9.1, Lemma 3's first construction, and the checked
-state-erasure bridge.  Lemma 3's later dimension-preserving Turing reduction
-and its complexity bounds are **NOT REQUIRED**.
+Proposition 7(2) (author PDF p. 12) includes the ordinary LL/MELL route: the paper first reduces
+ordinary LL to ABVASS through ILZ, then records affine/contractive and
+lossy/expansive variants in the same proposition.  The present ordinary-MELL
+theorem is not labelled an EXACT formalization because its checked composition
+uses translation details and a state-erasure bridge that do not coincide
+line-for-line with the paper, and the polynomial-space reduction/complexity
+bounds are not formalized.  It composes Fact 8, Claim 9.1, and Lemma 3's first
+construction; ordinary MELL is not outside the source route.
 
 ### 4.5 Other Mathematical Sources
 
@@ -337,7 +339,7 @@ proof or formal representation required repair.
 | ID | Source result | Problem and repair | Kind | Checked result / evidence |
 |---|---|---|---|---|
 | R01 | BLS-v1, Lemma 4.5 | Use `Con(P) = {0} union union_i (Q_{>0} b_i + Con(P_i))`; the component coefficient is strictly positive.  Allowing zero adds a boundary ray. | proof/intermediate-equality repair; numbered conclusion exact | `Mell.Geometry.Cone.periodic_cone_union_strict`; `Mell.Separator.TransformerPeriod.lemma_4_5_periodic_almost_semilinear_relation`; checked one- and two-dimensional regressions in [`RepairExamples.v`](../theories/Audit/RepairExamples.v) |
-| R02 | BLS-v1, Lemma 4.6 | Intersect the doubled reachability set with the marker/control restriction and the semilinear relation before projecting to the input/output coordinates; retain only marker total one (the design describes the 0/1 control cases). | proof-construction repair; numbered conclusion exact | `Mell.Separator.DoubledRelation.doubled_restriction_semilinear`, `doubled_projection_iff`, and `lemma_4_6_special_leaf_inter_semilinear`; [Task 11-A audit](review/t11-a-doubled-period-geometry-audit.md) |
+| R02 | BLS-v1, Lemma 4.6 | The paper already imposes marker total one before projection.  The formal construction makes the arbitrary semilinear relation `H` explicit in `DoubledRestriction H = MarkerOne /\ H` and proves that it is preserved through restriction and projection. | construction-completion, not a missing paper marker restriction; numbered conclusion exact | `Mell.Separator.DoubledRelation.MarkerOne`, `doubled_restriction_semilinear`, `doubled_projection_iff`, and `lemma_4_6_special_leaf_inter_semilinear`; [Task 11-A audit](review/t11-a-doubled-period-geometry-audit.md) |
 | R03 | BLS-v1, Appendix B.1 | Preserve zero-child leaves, ordered child positions, and an independent root-output comparison in the exact `IRunLe`; prove its WQO and finite-cover basis.  Current actions have positive arity, so arity zero is represented by the explicit leaf label, not a nullary action. | representation/formalization repair; Appendix B.1 conclusion exact | `Mell.BVAS.RunOrder.IRunLe`; `Mell.Order.FiniteBasis.irun_le_wqo`; `Mell.Order.FiniteBasis.irun_le_finite_cover`; [historical ledger audit](review/doc-prov-r-historical-repair-ledger.md) |
 | R04 | BLS-v1, Appendix B Fact B.3 / Lemma B.2 | Require the same action and ordered child comparison at the parent, lift through contexts, and retain the exact additive amalgamation equation.  The standalone old Fact B.3 is false for equal-output runs using different actions. | Fact B.3 statement repair with counterexample; Lemma B.2 proof repair and exact conclusion | `Mell.BVAS.RunOrder.root_same_action_mono`; `Mell.BVAS.RunOrder.context_lift`; `Mell.BVAS.Amalgamation.run_amalgamation`; `Mell.Audit.RepairExamples.old_fact_b3_missing_same_action` |
 | R05 | BLS-FoSSaCS, Lemma 6 | From root-configuration comparison plus ordered-decoration embedding prove only the sound implication to the original context order; do not replace that occurrence-sensitive order in downstream amalgamation. | representation/proof repair; full biconditional not required | `Mell.BVASS.OrderedBridge.ordered_embed_implies_context_insert`; `Mell.BVASS.StatefulAmalgamation.stateful_context_order_amalgamation`; [stateful-order audit](review/t09-stateful-bvass-audit.md); [permutation regression](../theories/Audit/BridgeExamples.v) |
@@ -346,7 +348,7 @@ proof or formal representation required repair.
 | R08 | historical locator: Lemma 6.11 / Theorem 6.1; current BLS-v1 correspondence: Lemma 6.8 | Preserve `ExtractFace Q F excluded remaining`: remove the excluded/lower set from the current remainder.  The historical locator is retained rather than silently renumbered to the present correspondence table. | notation/argument-order correction; numbered conclusion exact | `Mell.Geometry.FaceStrippingExtract.extract_remainder_cylindric`; [audit and regression](review/t11-d-face-stripping-audit.md) |
 | R09 | BLS-v1, Lemma 6.3 / Lemma 7.5 | Translate the historical one-based `1 <= i < j <= n` convention to the implementation's zero-based slices, prove target-difference membership, and forbid later-to-earlier edges without forbidding the converse. | index/direction proof correction; mathematical direction exact | `Mell.Geometry.FaceStrippingDiagonal.lemma_6_3_stripping_diagonal`; `Mell.Separator.WitnessUpdate.lemma_7_5_new_node_edge_direction`; [audit](review/t11-d-face-stripping-audit.md); [regression](../theories/Audit/FaceStrippingDiagonalExamples.v) |
 | R10 | BLS-v1, Section 7 | Preserve SCC-local homogeneity, the paper attractor, and coverage of complete valid runs; compare counts by cone dimension from high to low and prove strict rank decrease. | witness-contract/rank proof repair; no automatic repaired-proposition claim | `Mell.Separator.SafetyWitness.HomogeneousWitnessNodes`; `witness_run_coverage`; `Mell.Audit.PaperFidelityBridges.paper_attractor_iff_attractor`; `Mell.Separator.RankDecrease.witness_rank_less_well_founded`; `Mell.Separator.WitnessUpdate.lemma_7_1_safety_witness_rank_descent`; [Task 11-E audit](review/t11-e-safety-witness-rank-decrease-audit.md) |
-| R11 | BLS-v1, Appendix A / Lemma 2.1 | After sign reflection restrict to `Q_s = f_s(P) intersection N^d`; combine the periodic order and Dickson coordinate order only on that carrier, and derive the nonnegative difference there. | proof correction; Lemma 2.1 statement exact | `Mell.Order.PeriodicOrder.periodic_order_wqo_iff_finitely_generated`; [fidelity audit](review/arxiv-2607.09558v1-fidelity-audit.md) |
+| R11 | BLS-v1, Appendix A / Lemma 2.1 | The source already defines `Q_s = f_s(P) intersection N^d`.  The formal proof explicitly combines the transported periodic order with Dickson's componentwise order on that carrier and derives the nonnegative difference there. | proof elaboration/alternative proof; no missing source restriction; Lemma 2.1 statement exact | `Mell.Order.PeriodicOrder.periodic_order_wqo_iff_finitely_generated`; [fidelity audit](review/arxiv-2607.09558v1-fidelity-audit.md) |
 
 The R03/R04 boundary is historical, not a new renumbering: R03 owns the exact
 initialized-run order and its WQO/finite basis, while R04 owns the same-action
@@ -355,13 +357,15 @@ same-output/different-action counterexample therefore belongs to R04.
 
 ### 5.2 Why the repairs do not weaken the main theorem
 
-R01, R02, R04, R06, R07--R11 repair proof steps, intermediate statements,
+R01, R04, R06, and R07--R10 repair proof steps, intermediate statements,
 representations, or witness invariants as specified above; R03 fixes the exact
 formal order used by the Appendix-B proof.  R05 uses the paper's unordered,
 occurrence-sensitive context meaning rather than a stronger positional
 surrogate.  R07--R09 retain Theorem 6.1's decomposition and Lemmas 6.3/7.5's
-mathematical direction.  R11 does not change Lemma 2.1, and R01 does not change
-Lemma 4.5's conclusion.  Only the standalone, under-specified Fact B.3 is
+mathematical direction.  R02 completes the arbitrary-`H` construction and R11
+elaborates the paper's existing orthant restriction; neither repairs a missing
+source condition.  R01 does not change Lemma 4.5's conclusion, although the
+exported theorem is the downstream nonnegative specialization.  Only the standalone, under-specified Fact B.3 is
 classified as a repaired source statement.  None of these repairs adds a
 caller-visible hypothesis to `separator_S`.
 
@@ -370,15 +374,17 @@ caller-visible hypothesis to `separator_S`.
 - FoSSaCS Lemma 6's full ordered-decoration biconditional is **NOT REQUIRED**.
   The one sound implication plus a direct WQO bridge proves Corollary 7 and all
   downstream results.
-- Lazić–Schmitz Proposition 7(2), Lemma 3's second reduction, and their
-  complexity claims are **NOT REQUIRED** for the exact ordinary-MELL semantic
-  equivalence proved here.
+- The ordinary LL/MELL route is part of Lazić–Schmitz Proposition 7(2), but
+  its polynomial-space analysis and the paper's exact translation packaging
+  are **NOT FORMALIZED**; the repository proves the semantic equivalence by
+  the alternative checked composition listed above.
 - BLS-v1 Lemma 6.6 is proved locally through lattice/Gordan and integer
   inequality modules rather than accepted from Schrijver.  Its consequence,
   Corollary 6.7, is nevertheless used directly by the Lemma 6.10 development;
   neither item is unused.
-- BLS-v1 Corollary C.3 is not exported under its paper number, but its stitching
-  content is proved and used by `ws_run_order_stitch` and the Lemma C.4 proof.
+- BLS-v1 Corollary C.3 is not exported under its paper number.  The public
+  `ws_run_order_stitch` is one stitch; the required finite iteration is carried
+  by the recursive Lemma C.4 proof rather than a separately named theorem.
 - Examples 3.1, 3.5, 3.8, 3.9, 6.2, and 6.4 are explanatory and are not logical
   dependencies.  Repair-relevant counterexamples are retained as executable
   audit examples.

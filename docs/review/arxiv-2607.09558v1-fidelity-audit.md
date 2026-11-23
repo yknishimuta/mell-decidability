@@ -659,10 +659,10 @@ Mell.Separator.WitnessUpdate.replacement_edge_stays_new_and_nondecreasing :
 
 | Paper item and precise content | Coq declaration / dependency | Status and premise comparison |
 |---|---|---|
-| Lemma 2.1: periodic \(P\subseteq\mathbb Z^d\) is finitely generated iff \(\le_P\) is WQO on `P`. | `Mell.Order.PeriodicOrder.periodic_order_wqo_iff_finitely_generated : forall d P, Periodic P -> (afs P (PeriodicLe P) <-> FinitelyGeneratedPeriodic P)` | EXACT. Appendix A is replaced by a signed, orthant-correct proof. R11 repairs the paper proof's failure to restrict to the actual orthant part. |
+| Lemma 2.1: periodic \(P\subseteq\mathbb Z^d\) is finitely generated iff \(\le_P\) is WQO on `P` (Appendix A, p. 29). | `Mell.Order.PeriodicOrder.periodic_order_wqo_iff_finitely_generated : forall d P, Periodic P -> (afs P (PeriodicLe P) <-> FinitelyGeneratedPeriodic P)` | EXACT statement. Appendix A already defines `Q_s = f_s(P) intersection N^d`; R11 makes explicit how the transported periodic order is combined with componentwise order on that carrier. |
 | Remark 2.2: for finitely generated periodic `P`, `P` is full iff `clin(P)=P`. | `Mell.Geometry.ClosedLinearizationFinite.remark_2_2_full_iff_closed_linearization_fixed`. Its proof first establishes that every finitely generated rational cone is topologically closed. | EXACT; the finite-generation hypothesis is explicit and retained. |
 | Example 2.3 | `paper_example_2_3_not_closed_linearization_fixed` proves that `P={0} union N_{>0}^2` is full while the positive horizontal axis point belongs to `clin(P)` but not `P`. | EXACT regression; it prevents deleting finite generation from Remark 2.2. |
-| Appendix A proof details | `PeriodicOrder.v`, especially orthant decomposition and order-equivalence lemmas. | REPAIRED (R11), conclusion EXACT. |
+| Appendix A proof details | `PeriodicOrder.v`, especially orthant decomposition and order-equivalence lemmas. | ELABORATED/ALTERNATIVE PROOF (R11), conclusion EXACT; no orthant restriction absent from the paper is added. |
 
 ### Section 3 and Appendix B
 
@@ -671,29 +671,29 @@ Mell.Separator.WitnessUpdate.replacement_edge_stays_new_and_nondecreasing :
 | Example 3.1 | Motivation for a separator. | UNUSED. |
 | Fact 3.2: independently increasing arbitrary run leaves increases the root by their summed increments. | `Mell.BVAS.RunLeafOperations.fact_3_2_all_leaf_increments`. `LeafIncrementsRun` is occurrence-indexed and preserves the ordered source list. | EXACT; increments may differ and the root equation is exact. |
 | Theorem 3.3 | `Mell.Separator.Main.separator_S` (complete type above). | EXACT. |
-| Remark 3.4 | Discussion of effective search, not a mathematical premise of Theorem 3.3. | UNUSED in this theorem; realized later by the decision layer. |
+| Remark 3.4 (p. 7): when `d <= 5`, `Reach(S)` is semilinear, so Theorem 3.3 may take `I = Reach(S)`. | No direct declaration of this low-dimensional semilinearity result. | UNFORMALIZED and not needed by Theorem 3.3; it is not the repository's general decision/search procedure. |
 | Example 3.5 | Explanatory attractor example. | UNUSED. |
 | Fact 3.6: for arbitrary languages `K,L`, `Reach(K shuffle Reach(L)^+) ⊆ Reach(K shuffle L^+)`. | `Mell.BVAS.LanguageFlattening.fact_3_6_reach_shuffle_flatten`; `WordShuffle` is ordered interleaving and finite substitution is by leaf occurrence. | EXACT. No commutativity, semilinearity, finiteness, or decidable membership premise is present. |
 | Lemma 3.7: if A is an attractor inside invariant I, then `A ∪ Reach(X+ shuffle I*)` is an attractor. | `Mell.Separator.WitnessUpdate.lemma_3_7_attractor_extension` with `Attractor`, `IBVASInductiveInvariant`, and `A⊆I`. | EXACT. The explicit inclusion is the paper phrase "I containing A" (A). |
 | Examples 3.8, 3.9 | Directed-run examples. | UNUSED. |
 | Lemma 3.10: initialized runs form a WPO and satisfy exact amalgamation. | `Mell.BVAS.RunOrderAntisymmetry.lemma_3_10_irun_wpo_amalgamation` packages reflexivity, transitivity, `irun_le_antisymmetric`, WQO, and `run_amalgamation`. | EXACT for the paper theorem; Appendix-B proof remains REPAIRED by R03 because matched roots must have the same action. |
-| Remark 3.11 | Consequences/intuition for directed runs. | DERIVED where used. |
+| Remark 3.11 (p. 9): the order on all runs, with initial values left unfixed, is not a WQO; the one-leaf runs carrying pairwise distinct leaf values form an antichain. | `IRun`/`IRunLe` model initialized runs with fixed initial membership; unrestricted `FreeIRun` is the nearby all-run representation. | EXPLANATORY/UNFORMALIZED as a standalone counterexample. It warns why Lemma 3.10 is stated for initialized runs, not directed-run intuition. |
 | Lemma 3.12: every \(Q_w\) is finitely generated. | `lemma_3_12_directed_closed_period_finitely_generated`. | EXACT. |
 | Lemma 3.13: `u→v` and `C_u⊆C_v` imply `Q_u⊆Q_v`. | `lemma_3_13_directed_closed_period_inclusion`. | EXACT. `DirectedConeIncluded` is definitionally the stated inclusion (A). |
 | Appendix B Lemma B.1: `(IRuns(B), trianglelefteq)` is a WPO. | `irun_le_refl`, `irun_le_trans`, `irun_le_wqo`, and `irun_le_antisymmetric`; decorated-tree/Kruskal plus node-count proof. | EXACT. |
 | Appendix B Lemma B.2: exact initialized-run amalgamation. | `Mell.BVAS.Amalgamation.run_amalgamation`. | EXACT after the B.3 same-action repair. |
 | Appendix B Fact B.3: root update monotonicity. | `root_same_action_mono`. | REPAIRED: the paper statement without equal matched actions is false; `Audit/RepairExamples.v` gives a counterexample. The corrected fact is exactly what Lemma 3.10 requires. |
-| Appendix B Fact B.4: global context lifting. | `context_lift` and validity-preserving context lemmas. | EXACT after B.3 repair. |
+| Appendix B Fact B.4 (p. 30): a run embeds into a run containing it below a context. | `Mell.BVAS.Amalgamation.context_embed`. `Mell.BVAS.RunOrder.context_lift` is the separate replacement theorem that preserves validity, order, and the target increment. | `context_embed` is DIRECT/EXACT for Fact B.4; `context_lift` is a downstream substitution/validity-preservation result used by amalgamation. |
 
 ### Section 4
 
 | Paper item | Coq declaration / dependency | Status |
 |---|---|---|
 | Remark 4.1 and Example 4.2 | Definable-cone warning/example. | UNUSED as statements; the strict-boundary counterexample is regression-tested. |
-| Lemma 4.3: cone commutes with periodic intersection, Minkowski sum, and projection. | `periodic_cone_intersection`; cone-sum lemmas used by `lemma_4_5_periodic_almost_semilinear_relation`; `source_projection_cone`/`target_projection_cone` and relation projection bridges. | DERIVED. Positive common-denominator lemmas prevent unsupported rational scaling. |
+| Lemma 4.3 (p. 11): cone commutes with periodic intersection, Minkowski sum, and projection for signed sets. | `periodic_cone_intersection` and the cone-sum lemmas are signed; `source_projection_cone`/`target_projection_cone` are the nonnegative relation projections needed downstream. | REQUIRED SPECIALIZATIONS/DERIVED, not one exported theorem at the paper's full signed generality. Positive common-denominator lemmas prevent unsupported rational scaling. |
 | Lemma 4.4: `clin(P)` is finitely generated for asymptotically definable periodic `P⊆N^d`. | `Mell.Geometry.ClosedLinearizationL2.closed_linearization_finitely_generated`, with `Periodic`, `NonnegativeSet`, and `AsymptoticallyDefinable`. | EXACT. `NonnegativeSet` merely spells out `P⊆N^d` (A). |
-| Lemma 4.5: every almost-semilinear periodic set is asymptotically definable. | `lemma_4_5_periodic_almost_semilinear_relation` and set specialization. | REPAIRED/EXACT. Strict positive coefficients are essential at component boundaries; the old relaxed cone equality has a checked counterexample. |
-| Lemma 4.6: special-leaf reach relation intersect semilinear relation is almost semilinear. | `lemma_4_6_special_leaf_inter_semilinear`. | EXACT. The doubling construction, marker invariant, restriction-before-projection, and projection closure are all proved. |
+| Lemma 4.5 (p. 12): every almost-semilinear periodic `P subset Z^d` is asymptotically definable. | `lemma_4_5_periodic_almost_semilinear_relation : forall d (R : NRelation d), ...` and its nonnegative set specialization. | DOWNSTREAM-NEEDED NONNEGATIVE RELATION VERSION. It is not the paper's full signed statement. The strict-coefficient change repairs a false intermediate equality, not the numbered conclusion. |
+| Lemma 4.6 (p. 12): special-leaf reach relation intersect semilinear relation is almost semilinear. | `lemma_4_6_special_leaf_inter_semilinear`; `DoubledRestriction H` is `MarkerOne /\ H`. | EXACT conclusion. The paper already restricts to marker total one before projection; the formal construction additionally carries the arbitrary semilinear relation `H` through that restriction and projection. |
 | Lemma 4.7: push-in. | `Mell.Geometry.CenterPushIn.closed_linearization_push_in` (complete implicit type in focused log). | EXACT. Its explicit nonnegativity premise is the paper's `P⊆N^d` (A). |
 | Lemma 4.8: center characterization. | `Mell.Geometry.CenterCharacterization.center_characterization`. | EXACT. |
 | Lemma 4.9: `Cent(P)+clin(P)=Cent(P)`. | `Mell.Geometry.CenterAbsorption.center_absorbs_closed_linearization`. | EXACT. |
@@ -709,12 +709,12 @@ Mell.Separator.WitnessUpdate.replacement_edge_stays_new_and_nondecreasing :
 | Corollary 5.3: positive integer extrapolation of run directions. | `corollary_5_3_wsvas_run_scaling`, using the subtraction-free equalities `(r-1)root + scaled = r run` at both endpoints. | EQUIVALENT. |
 | Lemma 5.4: WSVAS safe linearization. | `lemma_5_4_wsvas_safe_linearization`. | EXACT. The semilinear complement/ray proof and witness-free almost-full argument introduce no choice oracle. |
 | Lemma 5.5, first equality: WSVAS runs coincide with reflexive-transitive step reachability. | `valid_ws_run_step_star`, `Mell.Separator.SafeLinearization.ws_step_star_has_run`, and `reach_wsvas_from_set_iff_star`. | DERIVED, both directions checked, including zero-step runs. |
-| Lemma 5.5, BVAS equality under `Reach(I+) ⊆ I`. | `lemma_5_5_bvas_wsvas_reach_iff`. | EQUIVALENT. `ClosedUnderFreeRuns` is the checked run-level form of that closure; the paper-shaped equivalence is proved through marked leaves. |
+| Lemma 5.5 (p. 16), BVAS equality for arbitrary `I` under `Reach(I+) ⊆ I`. | `lemma_5_5_bvas_wsvas_reach_iff`, whose invariant is fixed to `SimulationInvariant S code = Reach(S) union denote(code)`. | SUFFICIENT SPECIALIZATION FOR LEMMA 5.1, not the arbitrary-`I` public theorem. `SafeLinearization.v` proves `I = A union Reach(S)` extensionally equal to this simulation invariant and transports free-run closure before both calls. |
 | Lemma 5.6: for semilinear A, a concrete WSVAS simulates one main-branch BVAS step with `I=A∪Reach(B)`. | `Mell.Audit.PaperFidelityBridges.paper_lemma_5_6_bvas_wsvas_exists`; it eliminates the `Semilinear A` code witness inside `Prop` and returns the concrete WSVAS with a pointwise one-step iff. | EQUIVALENT. No code, closure, attractor, or decidability premise remains in the public contract. |
 | Lemma 5.7: one-source reduction. | `lemma_5_7_one_source_reduction`. | EXACT. It distinguishes one marked occurrence from one-or-more marked occurrences. |
 | Appendix C Lemma C.1 | `lemma_c_1_wsrun_order_iff_higman : WSRunOrder rho sigma <-> WSDirectionLe rho sigma /\ WSHigmanEmbed rho sigma`. | EXACT; direction is retained for empty encodings. |
 | Appendix C Corollary C.2 | `corollary_c_2_wsrun_wqo`. | EXACT. Transition types may be infinite. |
-| Appendix C Corollary C.3 | recursive `ws_run_order_stitch` plus empty-run and concatenation lemmas. | DERIVED. |
+| Appendix C Corollary C.3 | `ws_run_order_stitch` plus the recursive decomposition used in the Lemma C.4 proof. | REQUIRED FINITE-ITERATION CONTENT IS DERIVED; the public helper states one stitch, while its repeated use is internal rather than exported under the paper's corollary number. |
 | Appendix C Lemma C.4 | `lemma_c_4_wsrun_exact_amalgamation`. | EXACT; source and target equations are separate conjuncts. |
 
 ### Section 6
@@ -752,7 +752,7 @@ Mell.Separator.WitnessUpdate.replacement_edge_stays_new_and_nondecreasing :
 | `Periodic Q` alongside `FullPeriodic Q` in Section 6 | A | `FullPeriodic` already contains periodicity; projection derives it. Redundant, not strengthening. |
 | finite generator lists for directed cones/faces | A/B | Directed runs are defined with finitely generated cones; rational-polyhedral face theorems construct the lists. |
 | a `SemiCode` in the concrete WSVAS | B | `Semilinear A` is existentially a code plus denotation equivalence. Elimination is inside Prop; no code-selection oracle is assumed. |
-| `ClosedUnderFreeRuns S I` in Lemma 5.5 | B | It is derived from the paper's `Reach_B(I^+)⊆I`/inductive-invariant assumption by the free-run induction bridge. |
+| `ClosedUnderFreeRuns S (SimulationInvariant S code)` in the public Lemma 5.5 specialization | B | `SafeLinearization.v` derives it from the inductive invariant `I=A union Reach(S)` and the extensional equality with `SimulationInvariant`; the repository does not export the paper's arbitrary-`I` version. |
 | `witness_safe_semilinear` and `witness_reach_safe` fields | A/B | The paper fixes a semilinear `Phi` with `Reach(B)⊆Phi` before defining a safety witness. Coq packages that ambient context in the record so every update carries it unchanged; it is not a stronger per-update premise. |
 | reachable-side `Attractor` field in `SafetyWitness` | B | `paper_attractor_iff_attractor` derives both formulations for arbitrary `A`; `PaperSafetyWitness` conversions preserve all remaining fields and the node list. It is a representation premise automatically obtained from the paper definition. |
 | `DirectedConeIncluded u v` in Lemma 3.13 | A | Definitionally `C_u⊆C_v`, exactly the paper premise. |
@@ -760,7 +760,7 @@ Mell.Separator.WitnessUpdate.replacement_edge_stays_new_and_nondecreasing :
 | explicit supporting normals in Lemma 6.5/Corollary 6.7 | B | The rational-polyhedral H-representation supplies them; they are proof data, not a caller-visible premise of Theorem 6.1. |
 | same action in the corrected Appendix-B root lemma | C | Without it Fact B.3 is false. `IRunEmbed` supplies it at matched nodes, so Lemma 3.10's statement is unchanged. |
 | strict positive component coefficients in Lemma 4.5 proof | C | Allowing zero adds boundary rays; a checked two-dimensional counterexample witnesses the failure. The numbered conclusion is unchanged. |
-| orthant membership in the signed Lemma 2.1 proof | C | R11 is required for signed periodic sets; it repairs the proof, not the theorem statement. |
+| orthant membership in the signed Lemma 2.1 proof | A | Appendix A already defines `Q_s = f_s(P) intersection N^d`; R11 formalizes the combination of the transported periodic order with componentwise order on this stated carrier. |
 | difference membership, corrected extract order, and corrected indices in Section 6 | C | R07--R09 each repair an invalid proof step or inconsistent notation without strengthening Theorem 6.1/Lemma 6.3. |
 | decidable transitions, finite WSVAS alphabet, nonempty initials, `d>0`, finite generation of arbitrary P in Lemmas 5.1/5.4 | D | **Not present** in the checked contracts. |
 | any remaining suspected condition | E | None among the six audited bridge gaps; no unresolved class-D premise was found. |
@@ -785,9 +785,10 @@ Mell.Separator.WitnessUpdate.replacement_edge_stays_new_and_nondecreasing :
   operation.
 - **R09:** the implementation is zero-based and forbids edges from a later
   slice to an earlier slice. It does not forbid the converse.
-- **R11:** the signed proof of Lemma 2.1 restricts its Dickson argument to the
-  actual orthant part. No false cofinality claim over all signed vectors is
-  used.
+- **R11:** Appendix A already supplies the actual orthant part
+  `Q_s = f_s(P) intersection N^d`.  The formal proof makes explicit that the
+  transported periodic order and Dickson's componentwise order are combined
+  on this carrier; it does not add a missing paper restriction.
 
 R05 concerns a different, stateful BVASS context-family order. The Section-3
 `IRunLe` audited here remains the stateless Appendix-B order; the two were not
