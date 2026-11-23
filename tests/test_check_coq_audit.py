@@ -107,6 +107,77 @@ class AssumptionTranscriptTests(unittest.TestCase):
     def test_rejects_axioms_heading_without_dependency(self):
         self.assert_rejected(block("target", "Axioms:"), contains="no dependency")
 
+    def test_rejects_dependency_with_empty_type(self):
+        self.assert_rejected(
+            block("target", "Axioms:\nClassical_Prop.classic :"),
+            contains="incomplete",
+        )
+
+    def test_rejects_unknown_indented_continuation(self):
+        self.assert_rejected(
+            block(
+                "target",
+                "Axioms:\nClassical_Prop.classic : forall P : Prop, P \\/ ~ P\n"
+                "  unexpected audit text",
+            ),
+            contains="unexpected type",
+        )
+
+    def test_rejects_duplicate_dependency(self):
+        self.assert_rejected(
+            block(
+                "target",
+                "Axioms:\nClassical_Prop.classic : forall P : Prop, P \\/ ~ P\n"
+                "Classical_Prop.classic : forall P : Prop, P \\/ ~ P",
+            ),
+            contains="duplicate dependency",
+        )
+
+    def test_rejects_unframed_assumption_result(self):
+        self.assert_rejected(
+            "Axioms:\nOther.forbidden : False\n"
+            + block(
+                "target",
+                "Axioms:\nClassical_Prop.classic : forall P : Prop, P \\/ ~ P",
+            ),
+            contains="outside an audit block",
+        )
+
+
+class StatementQueryTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.audit = load_audit_module()
+
+    @staticmethod
+    def source(name="target", query="target"):
+        return (
+            f'Goal True. idtac "MELL_AUDIT_BEGIN {name}". exact I. Qed.\n'
+            f"Print Assumptions {query}.\n"
+            f'Goal True. idtac "MELL_AUDIT_END {name}". exact I. Qed.\n'
+        )
+
+    def test_accepts_query_matching_marker_and_manifest(self):
+        self.audit.validate_statement_queries(
+            self.source(), ["target"], pathlib.Path("Statements.v")
+        )
+
+    def test_rejects_query_target_different_from_marker(self):
+        with self.assertRaises(self.audit.AuditError) as caught:
+            self.audit.validate_statement_queries(
+                self.source(query="wrong"), ["target"], pathlib.Path("Statements.v")
+            )
+        self.assertIn("Print Assumptions target", str(caught.exception))
+
+    def test_rejects_unframed_query(self):
+        with self.assertRaises(self.audit.AuditError) as caught:
+            self.audit.validate_statement_queries(
+                "Print Assumptions target.\n" + self.source(),
+                ["target"],
+                pathlib.Path("Statements.v"),
+            )
+        self.assertIn("unexpected audit query", str(caught.exception))
+
 
 class SourcePolicyTests(unittest.TestCase):
     @classmethod
@@ -164,6 +235,13 @@ Theorem safe : True. Proof. exact I. Qed.
         )
         self.assert_violation(source, "Parameter")
 
+    def test_rejects_parameter_after_module_type_alias(self):
+        source = "Module Type Alias := Signature.\nParameter forbidden : False.\n"
+        self.assert_violation(source, "Parameter")
+
+    def test_rejects_prefixed_global_parameter(self):
+        self.assert_violation("Polymorphic Parameter forbidden : Type.\n", "Parameter")
+
     def test_unterminated_comment_fails_closed(self):
         with self.assertRaises(self.audit.AuditError) as caught:
             self.audit.scan_coq_source("(* unfinished", pathlib.Path("Fixture.v"))
@@ -173,6 +251,20 @@ Theorem safe : True. Proof. exact I. Qed.
         with self.assertRaises(self.audit.AuditError) as caught:
             self.audit.scan_coq_source('Definition x := "unfinished', pathlib.Path("Fixture.v"))
         self.assertIn("unterminated string", str(caught.exception))
+
+    def test_comment_quoted_delimiter_is_not_treated_as_nested_comment(self):
+        source = (
+            '(* documentary text "(*" remains one comment *)\n'
+            "Theorem safe : True. Proof. exact I. Qed.\n"
+        )
+        self.assertEqual(self.audit.scan_coq_source(source, pathlib.Path("Fixture.v")), [])
+
+    def test_focused_policy_ignores_documentary_comment(self):
+        source = (
+            "(* Unset Guard Checking. ClassicalEpsilon *)\n"
+            "Theorem safe : True. Proof. exact I. Qed.\n"
+        )
+        self.assertEqual(self.audit.scan_focused_source(source, pathlib.Path("Fixture.v")), [])
 
 
 class CoqchkSummaryTests(unittest.TestCase):
@@ -222,6 +314,11 @@ CONTEXT SUMMARY
 
     def test_rejects_missing_context_summary(self):
         self.assert_rejected("ordinary coqchk output", "CONTEXT SUMMARY")
+
+    def test_rejects_header_words_outside_real_summary(self):
+        text = self.summary().replace("CONTEXT SUMMARY", "SUMMARY")
+        text += "\nwrapper observed CONTEXT SUMMARY text\n"
+        self.assert_rejected(text, "CONTEXT SUMMARY")
 
     def test_rejects_missing_required_section(self):
         text = self.summary().replace(

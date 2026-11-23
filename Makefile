@@ -1245,6 +1245,8 @@ audit-t10-f: check-t10-f
 	! grep -R -E '(^|[[:space:]])Admitted\.|(^|[[:space:]])admit([.;[:space:]]|$$)|^[[:space:]]*Axiom[[:space:]]|^[[:space:]]*Abort\.' theories/Reduction/ILZ.v theories/Reduction/MELLToABVASS.v theories/Reduction/MELLToABVASSCompleteness.v theories/Reduction/ZeroTest.v theories/Reduction/Main.v theories/Audit/MELLReductionExamples.v
 	! grep -R -E -i 'ClassicalEpsilon|ClassicalChoice|UIP|K_dec|eq_rect_eq|Eq_rect_eq|functional_extensionality|constructive_indefinite_description|oracle' theories/Reduction/ILZ.v theories/Reduction/MELLToABVASS.v theories/Reduction/MELLToABVASSCompleteness.v theories/Reduction/ZeroTest.v theories/Reduction/Main.v theories/Audit/MELLReductionExamples.v
 
+FINAL_AUDIT_SOURCES := theories/Reduction/FullZeroSystem.v theories/Reduction/ILZRuntime.v theories/Reduction/ILZ.v theories/Reduction/MELLToABVASSRuntime.v theories/Reduction/MELLToABVASS.v theories/Reduction/MELLToABVASSCompleteness.v theories/Reduction/ZeroTest.v theories/Reduction/ZeroTestFree.v theories/Reduction/Main.v theories/BVASS/FiniteSaturation.v theories/Logic/MultiplicativeWeight.v theories/Logic/UnitFragment.v theories/Decision theories/Audit/ZeroTestFreeExamples.v theories/Audit/FiniteSaturationExamples.v theories/Audit/MultiplicativeWeightExamples.v theories/Audit/UnitFragmentExamples.v theories/Audit/DecisionPathAudit.v theories/Audit/DecisionPathExamples.v theories/Audit/Regression.v theories/Audit/Statements.v
+
 .PHONY: check-final audit-final extract-final check-runtime-mell check-decision-paths check-extraction-differential check-verification-scope check-verification-artifacts audit-verification-gates
 
 check-verification-scope:
@@ -1259,15 +1261,14 @@ check-final: $(COQMAKEFILE)
 
 audit-final: check-final check-verification-scope
 	python3 -m unittest tests.test_check_coq_audit
+	python3 scripts/check_coq_audit.py statements theories/Audit/Statements.v scripts/audit-assumptions-manifest.txt
 	set -o pipefail; $(OPAMEXEC) coqtop -quiet -batch -Q theories Mell -Q vendor/minicooper MiniCooper -l theories/Audit/Statements.v 2>&1 | tee $(CORE_LOG_DIR)/audit-final.log
 	bash scripts/check-assumption-allowlist.sh $(CORE_LOG_DIR)/audit-final.log
 	bash scripts/check-coq-source-policy.sh
 	bash scripts/check-extraction-policy.sh
 	set -o pipefail; $(OPAMEXEC) $(MAKE) -f $(COQMAKEFILE) validate 2>&1 | tee $(CORE_LOG_DIR)/coqchk-final.log
 	python3 scripts/check_coq_audit.py coqchk $(CORE_LOG_DIR)/coqchk-final.log
-	! grep -R -E '(^|[[:space:]])Admitted\.|(^|[[:space:]])admit([.;[:space:]]|$$)|^[[:space:]]*Axiom[[:space:]]|^[[:space:]]*Abort\.' theories/Reduction/FullZeroSystem.v theories/Reduction/ILZRuntime.v theories/Reduction/ILZ.v theories/Reduction/MELLToABVASSRuntime.v theories/Reduction/MELLToABVASS.v theories/Reduction/MELLToABVASSCompleteness.v theories/Reduction/ZeroTest.v theories/Reduction/ZeroTestFree.v theories/Reduction/Main.v theories/BVASS/FiniteSaturation.v theories/Logic/MultiplicativeWeight.v theories/Logic/UnitFragment.v theories/Decision theories/Audit/ZeroTestFreeExamples.v theories/Audit/FiniteSaturationExamples.v theories/Audit/MultiplicativeWeightExamples.v theories/Audit/UnitFragmentExamples.v theories/Audit/DecisionPathAudit.v theories/Audit/DecisionPathExamples.v theories/Audit/Regression.v theories/Audit/Statements.v
-	! grep -R -E -i 'ClassicalEpsilon|ClassicalChoice|(^|[^[:alnum:]_])UIP([^[:alnum:]_]|$$)|(^|[^[:alnum:]_])K_dec([^[:alnum:]_]|$$)|eq_rect_eq|Eq_rect_eq|functional_extensionality|constructive_indefinite_description|oracle' theories/Reduction/FullZeroSystem.v theories/Reduction/ILZRuntime.v theories/Reduction/ILZ.v theories/Reduction/MELLToABVASSRuntime.v theories/Reduction/MELLToABVASS.v theories/Reduction/MELLToABVASSCompleteness.v theories/Reduction/ZeroTest.v theories/Reduction/ZeroTestFree.v theories/Reduction/Main.v theories/BVASS/FiniteSaturation.v theories/Logic/MultiplicativeWeight.v theories/Logic/UnitFragment.v theories/Decision theories/Audit/ZeroTestFreeExamples.v theories/Audit/FiniteSaturationExamples.v theories/Audit/MultiplicativeWeightExamples.v theories/Audit/UnitFragmentExamples.v theories/Audit/DecisionPathAudit.v theories/Audit/DecisionPathExamples.v theories/Audit/Regression.v theories/Audit/Statements.v
-	! grep -R -E -i 'Unset[[:space:]]+(Guard|Positivity|Universe)[[:space:]]+Checking|Set[[:space:]]+(Guard|Positivity|Universe)[[:space:]]+Checking[[:space:]]+Off' theories/Reduction/FullZeroSystem.v theories/Reduction/ILZRuntime.v theories/Reduction/ILZ.v theories/Reduction/MELLToABVASSRuntime.v theories/Reduction/MELLToABVASS.v theories/Reduction/MELLToABVASSCompleteness.v theories/Reduction/ZeroTest.v theories/Reduction/ZeroTestFree.v theories/Reduction/Main.v theories/BVASS/FiniteSaturation.v theories/Logic/MultiplicativeWeight.v theories/Logic/UnitFragment.v theories/Decision theories/Audit/ZeroTestFreeExamples.v theories/Audit/FiniteSaturationExamples.v theories/Audit/MultiplicativeWeightExamples.v theories/Audit/UnitFragmentExamples.v theories/Audit/DecisionPathAudit.v theories/Audit/DecisionPathExamples.v theories/Audit/Regression.v theories/Audit/Statements.v
+	python3 scripts/check_coq_audit.py focused-policy $(FINAL_AUDIT_SOURCES)
 
 extract-final: check-final
 	mkdir -p docs/review/extraction/final

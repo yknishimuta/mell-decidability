@@ -39,9 +39,9 @@
 - Consumes: current `audit-final` log and the eight `Print Assumptions` commands in `Statements.v`.
 - Produces: captured reproduction logs and a root-cause statement used by Tasks 2–4.
 
-- [ ] Reproduce the apostrophe-bearing `Parameter forbidden' : False` false PASS against the individual allowlist and full `audit-final` in a disposable clone.
-- [ ] Reproduce the `nonterminating is assumed to be guarded.` false PASS and inspect actual Coq/coqchk output formats.
-- [ ] Confirm the root causes: permissive line regex, no block identity/completeness contract, exit-code-only coqchk use, and partial raw-text source scan.
+- [x] Reproduce the apostrophe-bearing `Parameter forbidden' : False` false PASS against the individual allowlist and full `audit-final` in a disposable clone.
+- [x] Reproduce the `nonterminating is assumed to be guarded.` false PASS and inspect actual Coq/coqchk output formats.
+- [x] Confirm the root causes: permissive line regex, no block identity/completeness contract, absent full-object coqchk validation, and partial raw-text source scan.
 
 ### Task 2: Fail-closed assumptions parser
 
@@ -55,11 +55,11 @@
 - Consumes: `assumptions AUDIT_LOG EXPECTED_MANIFEST`, exact allowed name `Classical_Prop.classic`, explicit begin/end markers emitted by `Statements.v`.
 - Produces: exit 0 only when every expected theorem has exactly one complete block and every dependency is allowed; diagnostics name the theorem and offending line/dependency.
 
-- [ ] Write fixture tests for closed terms, classic-only, apostrophe identifiers, qualified identifiers, multiline types, guard assumptions, missing/empty/truncated logs, missing/duplicate/wrong markers, and unknown dependency syntax.
-- [ ] Run `python3 -m unittest tests.test_check_coq_audit` and verify failures occur because the parser does not yet exist.
-- [ ] Implement the smallest marker-aware parser and exact allowlist needed for those tests.
-- [ ] Add stable audit markers around each `Print Assumptions` command and the expected theorem manifest.
-- [ ] Run unit tests and the normal real transcript; require PASS with eight matched theorem blocks.
+- [x] Write fixture tests for closed terms, classic-only, apostrophe identifiers, qualified identifiers, multiline types, guard assumptions, missing/empty/truncated logs, missing/duplicate/wrong markers, and unknown dependency syntax.
+- [x] Run `python3 -m unittest tests.test_check_coq_audit` and verify failures occur because the parser does not yet exist.
+- [x] Implement the smallest marker-aware parser and exact allowlist needed for those tests.
+- [x] Add stable audit markers around each `Print Assumptions` command and the expected theorem manifest.
+- [x] Run unit tests and the normal real transcript; require PASS with eight matched theorem blocks.
 
 ### Task 3: Coq source safety scanner
 
@@ -72,9 +72,9 @@
 - Consumes: `source-policy` plus tracked project `.v` paths supplied by Git, excluding `vendor/`.
 - Produces: rejection of proof escapes, top-level `Axiom`/`Parameter`, and unsafe settings outside comments/strings, without rejecting `Module Type` signature parameters.
 
-- [ ] Add failing tests for global `Parameter`, `Axiom`, `Admitted`, `admit`, `Abort`, four unsafe settings, nested comments/strings, and a legitimate `Module Type` parameter.
-- [ ] Implement lexical stripping and conservative command classification; unknown scanner state fails closed.
-- [ ] Run unit tests and the repository-wide tracked-source scan.
+- [x] Add failing tests for global `Parameter`, `Axiom`, `Admitted`, `admit`, `Abort`, four unsafe settings, nested comments/strings, and a legitimate `Module Type` parameter.
+- [x] Implement lexical stripping and conservative command classification; unknown scanner state fails closed.
+- [x] Run unit tests and the repository-wide tracked-source scan.
 
 ### Task 4: Structured coqchk safety audit and Make integration
 
@@ -87,10 +87,10 @@
 - Consumes: `coqchk` output file created with `coqchk -silent -o PATH` and three exact required headings: type-in-type, unsafe (co)fixpoints, and positivity assumed.
 - Produces: exit 0 only when all headings occur exactly once and each section is `<none>`; `audit-final` executes unit tests, assumptions audit, source audit, and coqchk safety audit.
 
-- [ ] Add failing fixtures for all-empty valid output, each unsafe section populated, missing/duplicate sections, and malformed/truncated output.
-- [ ] Implement the parser and run unit tests green.
-- [ ] Add a full registered-object `coqchk -o` invocation and parser call to `audit-final`; preserve pipefail and logs.
-- [ ] Run focused `audit-final` on the unchanged project and require PASS.
+- [x] Add failing fixtures for all-empty valid output, each unsafe section populated, missing/duplicate sections, and malformed/truncated output.
+- [x] Implement the parser and run unit tests green.
+- [x] Add a full registered-object `coqchk` invocation and parser call to `audit-final`; preserve pipefail and logs.
+- [x] Run focused `audit-final` on the unchanged project and require PASS.
 
 ### Task 5: Disposable negative integration suite
 
@@ -102,10 +102,10 @@
 - Consumes: disposable local clone, overlaid audit files, pinned `_opam`, and per-case expected diagnostic substrings.
 - Produces: baseline/fault/recovery status plus evidence that apostrophe and guard faults fail both the individual gate and `make OPAMEXEC= audit-final` for the intended reason.
 
-- [ ] Add a diagnostic-aware `run_phase` helper that rejects failure for the wrong reason.
-- [ ] Add individual fixture cases for valid outputs, unauthorized axiom/parameter, apostrophe parameter, guard assumption, log integrity failures, unknown format, coqchk unsafe output, and source unsafe settings.
-- [ ] Add compiled disposable-clone integration cases for apostrophe and unsafe fixpoint faults, ensuring sources are registered and compiled before audit rejection.
-- [ ] Run the negative suite and require every baseline/recovery PASS and every injected fault DETECTED with its expected diagnostic.
+- [x] Add a diagnostic-aware `run_phase` helper that rejects failure for the wrong reason.
+- [x] Add individual fixture cases for valid outputs, unauthorized axiom/parameter, apostrophe parameter, guard assumption, log integrity failures, unknown format, coqchk unsafe output, and source unsafe settings.
+- [x] Add compiled disposable-clone integration cases for apostrophe and unsafe fixpoint faults, ensuring sources are registered and compiled before audit rejection.
+- [x] Run the negative suite and require every baseline/recovery PASS and every injected fault DETECTED with its expected diagnostic.
 
 ### Task 6: Paper fidelity and provenance corrections
 
@@ -118,10 +118,10 @@
 - Consumes: S1 arXiv:2607.09558v1, S2 FoSSaCS 2026 paper, S4 Lazić–Schmitz author PDF, and public Coq theorem types/call sites.
 - Produces: corrected D01–D06 and conservative classifications for F01–F03 plus Lemma 4.3, Corollary C.3, and S2 Lemma 6.
 
-- [ ] Verify each source page and each linked public Coq declaration/call site.
-- [ ] Correct the six mandatory factual errors and preserve the known statement/proof repair ledger.
-- [ ] Replace overbroad EXACT/EQUIVALENT labels with `necessary nonnegative specialization`, `sufficient special case`, or `sufficient existential alternative` where applicable.
-- [ ] Search all tracked prose for repeated stale claims and make only necessary consistency edits.
+- [x] Verify each source page and each linked public Coq declaration/call site.
+- [x] Correct the six mandatory factual errors and preserve the known statement/proof repair ledger.
+- [x] Replace overbroad EXACT/EQUIVALENT labels with `necessary nonnegative specialization`, `sufficient special case`, or `sufficient existential alternative` where applicable.
+- [x] Search all tracked prose for repeated stale claims and make only necessary consistency edits.
 
 ### Task 7: Final verification, remediation record, and commit
 

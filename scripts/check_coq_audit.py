@@ -9,7 +9,9 @@ import re
 import sys
 
 
-ALLOWED_ASSUMPTIONS = {"Classical_Prop.classic"}
+ALLOWED_ASSUMPTIONS = {
+    "Classical_Prop.classic": r"forall P : Prop, P \/ ~ P",
+}
 BEGIN_RE = re.compile(r"^MELL_AUDIT_BEGIN ([A-Za-z_][A-Za-z0-9_'.]*)$")
 END_RE = re.compile(r"^MELL_AUDIT_END ([A-Za-z_][A-Za-z0-9_'.]*)$")
 IDENTIFIER_RE = re.compile(
@@ -54,29 +56,46 @@ def _parse_assumption_body(name: str, lines: list[str]) -> list[str]:
         got = lines[0] if lines else "<empty>"
         raise AuditError(f"{name}: unrecognized assumption result: {got}")
 
-    dependencies: list[str] = []
-    have_entry = False
+    entries: list[tuple[str, str]] = []
+    current_name: str | None = None
+    current_type: list[str] = []
     for line in lines[1:]:
         if not line.strip():
             continue
         if line[:1].isspace():
-            if not have_entry:
+            if current_name is None:
                 raise AuditError(f"{name}: unrecognized indented dependency output: {line.strip()}")
+            current_type.append(line.strip())
             continue
-        match = re.fullmatch(r"([^\s:]+)\s*:\s*.*", line)
+        if current_name is not None:
+            entries.append((current_name, " ".join(current_type)))
+        match = re.fullmatch(r"([^\s:]+)\s*:\s*(.*)", line)
         if not match:
             raise AuditError(f"{name}: unrecognized dependency output: {line}")
-        dependency = match.group(1)
-        if not IDENTIFIER_RE.fullmatch(dependency):
-            raise AuditError(f"{name}: unrecognized dependency name: {dependency}")
-        dependencies.append(dependency)
-        have_entry = True
+        current_name = match.group(1)
+        if not IDENTIFIER_RE.fullmatch(current_name):
+            raise AuditError(f"{name}: unrecognized dependency name: {current_name}")
+        current_type = [match.group(2)] if match.group(2) else []
 
-    if not dependencies:
+    if current_name is not None:
+        entries.append((current_name, " ".join(current_type)))
+
+    if not entries:
         raise AuditError(f"{name}: Axioms heading has no dependency")
+    dependencies = [dependency for dependency, _ in entries]
+    if len(dependencies) != len(set(dependencies)):
+        raise AuditError(f"{name}: duplicate dependency in assumption output")
     unexpected = [dependency for dependency in dependencies if dependency not in ALLOWED_ASSUMPTIONS]
     if unexpected:
         raise AuditError(f"{name}: unauthorized assumption: {', '.join(unexpected)}")
+    for dependency, rendered_type in entries:
+        normalized_type = " ".join(rendered_type.split())
+        if not normalized_type:
+            raise AuditError(f"{name}: incomplete dependency type for {dependency}")
+        if normalized_type != ALLOWED_ASSUMPTIONS[dependency]:
+            raise AuditError(
+                f"{name}: unexpected type for {dependency}: {normalized_type}"
+            )
     return dependencies
 
 
@@ -119,6 +138,10 @@ def parse_assumption_transcript(text: str, expected: list[str]) -> dict[str, lis
             continue
         if active_name is not None:
             active_lines.append(line)
+        elif line.strip() == "Axioms:" or line.strip() == "Closed under the global context":
+            raise AuditError(
+                f"line {line_number}: assumption result outside an audit block: {line.strip()}"
+            )
 
     if active_name is not None:
         raise AuditError(f"unterminated assumption block for {active_name}")
@@ -132,7 +155,9 @@ def parse_assumption_transcript(text: str, expected: list[str]) -> dict[str, lis
     return {name: _parse_assumption_body(name, blocks[name]) for name in expected}
 
 
-def _strip_coq_comments_and_strings(text: str, path: pathlib.Path) -> str:
+def _strip_coq_lexical(
+    text: str, path: pathlib.Path, *, mask_strings: bool = True
+) -> str:
     output = list(text)
     index = 0
     comment_depth = 0
@@ -140,7 +165,23 @@ def _strip_coq_comments_and_strings(text: str, path: pathlib.Path) -> str:
     while index < len(text):
         pair = text[index : index + 2]
         if comment_depth:
-            if pair == "(*":
+            if in_string:
+                if pair == '""':
+                    output[index : index + 2] = "  "
+                    index += 2
+                elif text[index] == '"':
+                    output[index] = " "
+                    in_string = False
+                    index += 1
+                else:
+                    if text[index] != "\n":
+                        output[index] = " "
+                    index += 1
+            elif text[index] == '"':
+                output[index] = " "
+                in_string = True
+                index += 1
+            elif pair == "(*":
                 output[index : index + 2] = "  "
                 comment_depth += 1
                 index += 2
@@ -155,14 +196,16 @@ def _strip_coq_comments_and_strings(text: str, path: pathlib.Path) -> str:
             continue
         if in_string:
             if pair == '""':
-                output[index : index + 2] = "  "
+                if mask_strings:
+                    output[index : index + 2] = "  "
                 index += 2
             elif text[index] == '"':
-                output[index] = " "
+                if mask_strings:
+                    output[index] = " "
                 in_string = False
                 index += 1
             else:
-                if text[index] != "\n":
+                if mask_strings and text[index] != "\n":
                     output[index] = " "
                 index += 1
             continue
@@ -171,7 +214,8 @@ def _strip_coq_comments_and_strings(text: str, path: pathlib.Path) -> str:
             comment_depth = 1
             index += 2
         elif text[index] == '"':
-            output[index] = " "
+            if mask_strings:
+                output[index] = " "
             in_string = True
             index += 1
         else:
@@ -181,6 +225,50 @@ def _strip_coq_comments_and_strings(text: str, path: pathlib.Path) -> str:
     if in_string:
         raise AuditError(f"{path}: unterminated string")
     return "".join(output)
+
+
+def _strip_coq_comments_and_strings(text: str, path: pathlib.Path) -> str:
+    return _strip_coq_lexical(text, path, mask_strings=True)
+
+
+def validate_statement_queries(text: str, expected: list[str], path: pathlib.Path) -> None:
+    """Bind each manifest entry to its framed Print Assumptions command."""
+    clean = _strip_coq_lexical(text, path, mask_strings=False)
+    event_re = re.compile(
+        r'idtac\s+"MELL_AUDIT_(BEGIN|END)\s+([A-Za-z_][A-Za-z0-9_\'.]*)"\s*\.'
+        r"|Print\s+Assumptions\s+([A-Za-z_][A-Za-z0-9_'.]*)\s*\."
+    )
+    events: list[tuple[str, str]] = []
+    for match in event_re.finditer(clean):
+        if match.group(1):
+            events.append((match.group(1).lower(), match.group(2)))
+        else:
+            events.append(("query", match.group(3)))
+
+    marker_mentions = len(re.findall(r"MELL_AUDIT_(?:BEGIN|END)", clean))
+    marker_events = sum(kind != "query" for kind, _ in events)
+    query_mentions = len(re.findall(r"\bPrint\s+Assumptions\b", clean))
+    query_events = sum(kind == "query" for kind, _ in events)
+    if marker_mentions != marker_events or query_mentions != query_events:
+        raise AuditError(f"{path}: malformed audit marker or Print Assumptions command")
+
+    wanted: list[tuple[str, str]] = []
+    for name in expected:
+        wanted.extend((("begin", name), ("query", name), ("end", name)))
+    if events != wanted:
+        for index, event in enumerate(wanted):
+            if index >= len(events):
+                raise AuditError(f"{path}: missing Print Assumptions {event[1]} audit frame")
+            if events[index] != event:
+                if events[index][0] == "query" and index % 3 != 1:
+                    raise AuditError(
+                        f"{path}: unexpected audit query: Print Assumptions {events[index][1]}"
+                    )
+                raise AuditError(
+                    f"{path}: expected Print Assumptions {event[1]} in its matching frame, "
+                    f"got {events[index][0]} {events[index][1]}"
+                )
+        raise AuditError(f"{path}: unexpected audit query or marker: {events[len(wanted):]}")
 
 
 def _coq_commands(text: str) -> list[tuple[int, str]]:
@@ -221,15 +309,21 @@ def scan_coq_source(text: str, path: pathlib.Path) -> list[str]:
 
     for line, command in _coq_commands(clean):
         normalized = " ".join(command.split())
+        normalized = re.sub(r"^(?:#\[[^]]*\]\s*)+", "", normalized)
+        normalized = re.sub(
+            r"^(?:(?:Local|Global|Polymorphic|Monomorphic)\s+)+", "", normalized
+        )
         for pattern, label in unsafe_patterns + escape_patterns:
             if pattern.search(command):
                 violations.append(f"{path}:{line}: forbidden {label}")
 
         if re.match(r"^Module\s+Type\b", normalized):
-            structure.append("module-type")
+            if ":=" not in normalized:
+                structure.append("module-type")
             continue
         if re.match(r"^Module\b", normalized):
-            structure.append("module")
+            if ":=" not in normalized:
+                structure.append("module")
             continue
         if re.match(r"^Section\b", normalized):
             structure.append("section")
@@ -239,11 +333,30 @@ def scan_coq_source(text: str, path: pathlib.Path) -> list[str]:
                 structure.pop()
             continue
 
-        declaration = re.match(r"^(?:(?:Local|Global)\s+)?(Axioms?|Parameters?)\b", normalized)
+        declaration = re.match(r"^(Axioms?|Parameters?)\b", normalized)
         inside_module_type = "module-type" in structure
         if declaration and not inside_module_type:
             violations.append(
                 f"{path}:{line}: forbidden global {declaration.group(1)} declaration"
+            )
+    return violations
+
+
+FOCUSED_POLICY_RE = re.compile(
+    r"ClassicalEpsilon|ClassicalChoice|\bUIP\b|\bK_dec\b|eq_rect_eq|Eq_rect_eq|"
+    r"functional_extensionality|constructive_indefinite_description|oracle",
+    re.IGNORECASE,
+)
+
+
+def scan_focused_source(text: str, path: pathlib.Path) -> list[str]:
+    clean = _strip_coq_comments_and_strings(text, path)
+    violations: list[str] = []
+    for line_number, line in enumerate(clean.splitlines(), start=1):
+        match = FOCUSED_POLICY_RE.search(line)
+        if match:
+            violations.append(
+                f"{path}:{line_number}: forbidden focused-audit token {match.group(0)}"
             )
     return violations
 
@@ -256,9 +369,13 @@ COQCHK_HEADINGS = {
 
 
 def parse_coqchk_summary(text: str) -> dict[str, list[str]]:
-    if text.count("CONTEXT SUMMARY") != 1:
-        raise AuditError("coqchk output must contain exactly one CONTEXT SUMMARY")
     lines = text.splitlines()
+    summary_indexes = [
+        index for index, line in enumerate(lines) if line.strip() == "CONTEXT SUMMARY"
+    ]
+    if len(summary_indexes) != 1:
+        raise AuditError("coqchk output must contain exactly one CONTEXT SUMMARY")
+    lines = lines[summary_indexes[0] + 1 :]
     sections: dict[str, list[str]] = {}
     index = 0
     while index < len(lines):
@@ -326,6 +443,33 @@ def command_source_policy(args: argparse.Namespace) -> None:
     )
 
 
+def command_focused_policy(args: argparse.Namespace) -> None:
+    if not args.sources:
+        raise AuditError("focused policy received no Coq sources")
+    violations: list[str] = []
+    sources: list[pathlib.Path] = []
+    for path in args.sources:
+        if path.is_dir():
+            sources.extend(sorted(path.rglob("*.v")))
+        else:
+            sources.append(path)
+    if not sources:
+        raise AuditError("focused policy resolved no Coq sources")
+    for path in sources:
+        text = read_required_text(path, "Coq source")
+        violations.extend(scan_focused_source(text, path))
+    if violations:
+        raise AuditError("focused policy violations:\n" + "\n".join(violations))
+    print(f"focused Coq policy: {len(sources)} sources contain no forbidden tokens")
+
+
+def command_statements(args: argparse.Namespace) -> None:
+    source = read_required_text(args.statements_file, "audit statements source")
+    expected = read_manifest(args.manifest)
+    validate_statement_queries(source, expected, args.statements_file)
+    print(f"audit statement framing: {len(expected)} manifest queries match their markers")
+
+
 def command_coqchk(args: argparse.Namespace) -> None:
     summary = read_required_text(args.coqchk_log, "coqchk log")
     parse_coqchk_summary(summary)
@@ -342,6 +486,13 @@ def build_parser() -> argparse.ArgumentParser:
     source_policy = subparsers.add_parser("source-policy")
     source_policy.add_argument("sources", nargs="+", type=pathlib.Path)
     source_policy.set_defaults(func=command_source_policy)
+    focused_policy = subparsers.add_parser("focused-policy")
+    focused_policy.add_argument("sources", nargs="+", type=pathlib.Path)
+    focused_policy.set_defaults(func=command_focused_policy)
+    statements = subparsers.add_parser("statements")
+    statements.add_argument("statements_file", type=pathlib.Path)
+    statements.add_argument("manifest", type=pathlib.Path)
+    statements.set_defaults(func=command_statements)
     coqchk = subparsers.add_parser("coqchk")
     coqchk.add_argument("coqchk_log", type=pathlib.Path)
     coqchk.set_defaults(func=command_coqchk)

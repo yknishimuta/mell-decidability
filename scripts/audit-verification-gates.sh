@@ -315,7 +315,7 @@ Print Assumptions forged_claim.
 Goal True. idtac "MELL_AUDIT_END forged_claim". exact I. Qed.
 EOF
 printf 'forged_claim\n' >> scripts/audit-assumptions-manifest.txt
-run_phase_diagnostic fail integrated-apostrophe fault "unauthorized assumption: forbidden'" make audit-final
+run_phase_diagnostic fail integrated-apostrophe fault "Coq audit: forged_claim: unauthorized assumption: forbidden'" make audit-final
 restore_audit_probe "$apostrophe_probe"
 run_phase pass integrated-apostrophe recovery make audit-final
 detections=$((detections + 1))
@@ -340,7 +340,7 @@ Print Assumptions inherited_false.
 Goal True. idtac "MELL_AUDIT_END inherited_false". exact I. Qed.
 EOF
 printf 'inherited_false\n' >> scripts/audit-assumptions-manifest.txt
-run_phase_diagnostic fail integrated-guard fault 'nonterminating is assumed to be guarded.' make audit-final
+run_phase_diagnostic fail integrated-guard fault 'Coq audit: inherited_false: unrecognized dependency output: nonterminating is assumed to be guarded.' make audit-final
 restore_audit_probe "$guard_probe"
 run_phase pass integrated-guard recovery make audit-final
 detections=$((detections + 1))
@@ -361,7 +361,7 @@ Print Assumptions qa2_uses_forbidden_axiom.
 Goal True. idtac "MELL_AUDIT_END qa2_uses_forbidden_axiom". exact I. Qed.
 EOF
 printf 'qa2_uses_forbidden_axiom\n' >> scripts/audit-assumptions-manifest.txt
-run_phase_diagnostic fail used-axiom fault qa2_forbidden_used make audit-final
+run_phase_diagnostic fail used-axiom fault 'Coq audit: qa2_uses_forbidden_axiom: unauthorized assumption: qa2_forbidden_used' make audit-final
 cp "$scratch/Statements.baseline" theories/Audit/Statements.v
 cp "$scratch/assumptions-manifest.baseline" scripts/audit-assumptions-manifest.txt
 rm -f QA2ExternalAxiom.v QA2ExternalAxiom.vo QA2ExternalAxiom.glob QA2ExternalAxiom.vok QA2ExternalAxiom.vos

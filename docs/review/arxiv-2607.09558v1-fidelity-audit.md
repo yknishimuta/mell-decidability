@@ -46,9 +46,10 @@ four important kinds of deviation:
    paper-shaped Lemma 5.6.  The historical GAP findings remain documented
    below, together with their exact closure declarations.  None of these
    additions changes `separator_S`, `singleton_separator`, or the decision
-   procedure.  The R03/R07--R09/R11 repairs retain their `REPAIRED`
+   procedure.  The R03/R07--R09 repairs retain their `REPAIRED`
    classification rather than being relabelled merely because a wrapper was
-   added.
+   added.  R11 is instead a proof elaboration/alternative proof of an exact
+   statement; it does not repair a missing restriction in the source.
 
 There are no admitted obligations or new mathematical axioms.  The late
 geometric and existence proofs depend only on `Classical_Prop.classic`; many
@@ -677,13 +678,13 @@ Mell.Separator.WitnessUpdate.replacement_edge_stays_new_and_nondecreasing :
 | Lemma 3.7: if A is an attractor inside invariant I, then `A ∪ Reach(X+ shuffle I*)` is an attractor. | `Mell.Separator.WitnessUpdate.lemma_3_7_attractor_extension` with `Attractor`, `IBVASInductiveInvariant`, and `A⊆I`. | EXACT. The explicit inclusion is the paper phrase "I containing A" (A). |
 | Examples 3.8, 3.9 | Directed-run examples. | UNUSED. |
 | Lemma 3.10: initialized runs form a WPO and satisfy exact amalgamation. | `Mell.BVAS.RunOrderAntisymmetry.lemma_3_10_irun_wpo_amalgamation` packages reflexivity, transitivity, `irun_le_antisymmetric`, WQO, and `run_amalgamation`. | EXACT for the paper theorem; Appendix-B proof remains REPAIRED by R03 because matched roots must have the same action. |
-| Remark 3.11 (p. 9): the order on all runs, with initial values left unfixed, is not a WQO; the one-leaf runs carrying pairwise distinct leaf values form an antichain. | `IRun`/`IRunLe` model initialized runs with fixed initial membership; unrestricted `FreeIRun` is the nearby all-run representation. | EXPLANATORY/UNFORMALIZED as a standalone counterexample. It warns why Lemma 3.10 is stated for initialized runs, not directed-run intuition. |
+| Remark 3.11 (p. 9): the order on all runs, with initial values left unfixed, is not a WQO; the one-leaf runs carrying pairwise distinct leaf values form an antichain. | The shared `IRun` tree is interpreted by `ValidIRun` for initialized runs and `ValidFreeIRun` when leaves are unrestricted; `IRunLe` is the nearby run order. | EXPLANATORY/UNFORMALIZED as a standalone counterexample. It warns why Lemma 3.10 is stated for initialized runs, not directed-run intuition. |
 | Lemma 3.12: every \(Q_w\) is finitely generated. | `lemma_3_12_directed_closed_period_finitely_generated`. | EXACT. |
 | Lemma 3.13: `u→v` and `C_u⊆C_v` imply `Q_u⊆Q_v`. | `lemma_3_13_directed_closed_period_inclusion`. | EXACT. `DirectedConeIncluded` is definitionally the stated inclusion (A). |
 | Appendix B Lemma B.1: `(IRuns(B), trianglelefteq)` is a WPO. | `irun_le_refl`, `irun_le_trans`, `irun_le_wqo`, and `irun_le_antisymmetric`; decorated-tree/Kruskal plus node-count proof. | EXACT. |
 | Appendix B Lemma B.2: exact initialized-run amalgamation. | `Mell.BVAS.Amalgamation.run_amalgamation`. | EXACT after the B.3 same-action repair. |
 | Appendix B Fact B.3: root update monotonicity. | `root_same_action_mono`. | REPAIRED: the paper statement without equal matched actions is false; `Audit/RepairExamples.v` gives a counterexample. The corrected fact is exactly what Lemma 3.10 requires. |
-| Appendix B Fact B.4 (p. 30): a run embeds into a run containing it below a context. | `Mell.BVAS.Amalgamation.context_embed`. `Mell.BVAS.RunOrder.context_lift` is the separate replacement theorem that preserves validity, order, and the target increment. | `context_embed` is DIRECT/EXACT for Fact B.4; `context_lift` is a downstream substitution/validity-preservation result used by amalgamation. |
+| Appendix B Fact B.4 (p. 30): a run is below a run containing it below a context. | `Mell.BVAS.Amalgamation.context_embed` proves the `IRunEmbed` conjunct. The root-target comparison supplies the `nvec_le` conjunct required by `IRunLe`. `Mell.BVAS.RunOrder.context_lift` is the separate replacement theorem that preserves validity, order, and the target increment. | The embedding lemma plus target comparison are DIRECT/EXACT for Fact B.4; `context_lift` is a downstream substitution/validity-preservation result used by amalgamation. |
 
 ### Section 4
 

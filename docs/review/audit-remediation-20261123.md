@@ -27,12 +27,15 @@ The corrected tables now record:
   transported-periodic-order/componentwise-order argument explicit; it does
   not add a missing orthant restriction.
 - Remark 3.11 (p. 9) warns that all runs with unfixed initial values are not
-  WQO because distinct one-leaf values form an antichain.
+  WQO because distinct one-leaf values form an antichain.  Both interpretations
+  use the shared `IRun` tree, with `ValidIRun` versus `ValidFreeIRun`.
 - Lemma 4.6 already applies marker-total-one before projection in the paper.
   `DoubledRestriction H` additionally carries arbitrary semilinear `H` through
   the construction.
-- Fact B.4 maps directly to `Mell.BVAS.Amalgamation.context_embed`;
-  `context_lift` is the separate validity-preserving replacement theorem.
+- Fact B.4's `IRunLe` conclusion uses `Mell.BVAS.Amalgamation.context_embed`
+  for its embedding conjunct and the root-target comparison for its order
+  conjunct; `context_lift` is the separate validity-preserving replacement
+  theorem.
 - Lazić–Schmitz Proposition 7(2) includes the ordinary LL/MELL route.  This
   repository is not labelled an exact formalization because translation
   packaging differs and the polynomial-space analysis is not formalized.
@@ -62,32 +65,36 @@ The old assumptions scan recognized only colon-terminated names made from
 alphanumerics, `_`, and `.`, so it ignored a legal Coq apostrophe identifier
 such as `forbidden'`.  It also ignored the colon-free message
 `nonterminating is assumed to be guarded.`.  The audit transcript had no
-machine-checked theorem identity/count framing, and `audit-final` checked the
-`coqchk` exit status but did not inspect its safety-exception sections.
+machine-checked theorem identity/count framing, and the baseline `audit-final`
+did not invoke the full registered-object `coqchk` validation at all.
 
 Both supplied probes were reproduced before the change: their registered and
 compiled `audit-final` runs exited 0.
 
 ### New behavior
 
-`scripts/check_coq_audit.py` is a fail-closed standard-Python checker with
-three subcommands:
+`scripts/check_coq_audit.py` is a fail-closed standard-Python checker whose
+subcommands cover:
 
 1. `assumptions` requires exactly the manifest-listed marker blocks, accepts
-   only the exact dependency `Classical_Prop.classic` (or a closed term),
-   handles apostrophes and continuation lines, and rejects missing, empty,
-   truncated, duplicate, reordered, or unknown output.
+   only the exact dependency and type of `Classical_Prop.classic` (or a closed
+   term), handles apostrophes and continuation lines, and rejects missing,
+   empty, truncated, duplicate, reordered, unframed, or unknown output.
 2. `source-policy` lexes nested Coq comments and strings, then rejects global
    `Axiom`/`Parameter`, proof escapes, and unsafe checking directives.  A
    `Parameter` inside `Module Type` remains valid.
 3. `coqchk` requires one context summary and requires all of type-in-type,
    unsafe `(co)fixpoints`, and assumed positivity to be present and `<none>`.
+4. `statements` binds each manifest entry to the matching begin marker,
+   `Print Assumptions` target, and end marker in `Statements.v`.
+5. `focused-policy` replaces raw-text greps with comment/string-aware checks
+   for the final proof-path source set.
 
 The source-policy auxiliary scan covers all 265 Git-tracked project-managed
 `.v` files and intentionally excludes `vendor/**`.  The 269-source build,
 dependency, and kernel checks still include the registered vendor sources.
 
-`audit-final` now runs the 29 parser/scanner unit tests, marker-aware assumption
+`audit-final` now runs the 41 parser/scanner unit tests, marker-aware assumption
 checking, the source policy, extraction policy, full `coqchk`, and the
 fail-closed `coqchk` summary parser.
 
@@ -101,7 +108,7 @@ the observed process exit codes, not inferred from old logs.
 | `PATH="$PWD/_opam/bin:$PATH" coq_makefile -f _CoqProject -o Makefile.coq` | 0 | Makefile regenerated. |
 | `PATH="$PWD/_opam/bin:$PATH" make -B -f Makefile.coq -j2` | 0 | Forced full rebuild of all registered sources. |
 | `PATH="$PWD/_opam/bin:$PATH" make -f Makefile.coq validate` | 0 | Kernel validation passed. |
-| `PATH="$PWD/_opam/bin:$PATH" make OPAMEXEC= audit-final` | 0 | 29 unit tests, 8 marked theorem blocks, source/extraction policy, and kernel safety parser passed. |
+| `PATH="$PWD/_opam/bin:$PATH" make OPAMEXEC= audit-final` | 0 | 41 unit tests, 8 source-bound marked theorem queries, source/extraction policy, and kernel safety parser passed. |
 | `bash scripts/check-verification-scope.sh --require-vo` | 0 | 269 tracked sources match `_CoqProject`; every source has a normal `.vo`. |
 | `PATH="$PWD/_opam/bin:$PATH" make OPAMEXEC= check-runtime-mell check-decision-paths check-extraction-differential` | 0 | Runtime 22/22, decision paths 11/11, differential 53/53. |
 | `PATH="$PWD/_opam/bin:$PATH" bash scripts/audit-verification-gates.sh` | 0 | 36/36 injected faults detected, with successful baseline and recovery checks. |

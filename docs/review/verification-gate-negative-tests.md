@@ -144,11 +144,11 @@ trust audit and this explicit expectation together.
 
 ## Final verification
 
-The following fresh checks passed on 2026-10-27:
+The following fresh checks passed on 2026-10-27 (the original QA-2 baseline):
 
-- isolated negative suite: 36/36 injected faults detected; every baseline and
+- isolated negative suite: 18/18 injected faults detected; every baseline and
   post-restore check passed;
-- source/artifact scope: 269 tracked sources exactly matched 269
+- source/artifact scope: 268 tracked sources exactly matched 268
   `_CoqProject` entries, and every entry had a normal `.vo`;
 - forced full `Makefile.coq` rebuild: exit 0;
 - `make -f Makefile.coq validate`: exit 0, including the complete registered
@@ -169,3 +169,10 @@ detection, and count-only runtime manifest validation.  All three were fixed;
 the reviewer then re-ran the relevant read-only checks and returned PASS with
 no substantive findings.  The final forced rebuild and `validate`/`coqchk`
 rerun after those corrections both exited 0.
+
+The 2026-11-23 remediation reran the expanded suite separately: 36/36 injected
+faults were detected, including registered and compiled apostrophe-identifier
+and unsafe-fixpoint probes.  The former failed on the exact unauthorized
+assumption and the latter on Coq's exact assumed-guard dependency line; each
+case's restored repository then passed `audit-final`.  The remediated source
+closure contains 269 tracked and registered Coq sources.
